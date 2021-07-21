@@ -1,0 +1,11 @@
+#Режим записи - RECORDER, режим воспроизведения (просмотра) - PLAYER
+mode: RECORDER
+
+games:
+  Duels: 0
+
+modes:
+  Classic: 0
+
+maps:
+  Арена: 0

@@ -1,0 +1,9 @@
+main: net.Abdymazhit.VimeReplays.VimeReplays
+name: VimeReplays
+version: 1.0.0
+description: Replay система для VimeWorld
+author: Abdymazhit
+prefix: VimeReplays
+commands:
+  startrecording:
+  stoprecording:
