@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class ArmSwingData extends RecordingData implements Serializable {
 
-    private final int entityId;
+    private final short entityId;
 
-    public ArmSwingData(int entityId) {
+    public ArmSwingData(short entityId) {
         this.entityId = entityId;
     }
 
-    public int getEntityId() { return entityId; }
+    public short getEntityId() { return entityId; }
 }

@@ -5,5 +5,5 @@ public enum StatusCode {
     GameNameError,
     GameTypeError,
     MapNameError,
-    NoPlayersError;
+    NoPlayersError
 }

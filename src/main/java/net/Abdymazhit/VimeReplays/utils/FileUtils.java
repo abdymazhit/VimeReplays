@@ -56,7 +56,8 @@ public class FileUtils {
             size = data.length;
             byte[] compressed = Zstd.compress(data);
 
-            FileOutputStream fileOutputStream = new FileOutputStream(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.rep");
+            RandomAccessFile raf = new RandomAccessFile(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.rep", "rw");
+            FileOutputStream fileOutputStream = new FileOutputStream(raf.getFD());
             fileOutputStream.write(compressed);
             fileOutputStream.close();
 

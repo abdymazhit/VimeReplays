@@ -6,11 +6,11 @@ public class SneakingData extends RecordingData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final int entityId;
+    private final short entityId;
 
-    public SneakingData(int entityId) {
+    public SneakingData(short entityId) {
         this.entityId = entityId;
     }
 
-    public int getEntityId() { return entityId; }
+    public short getEntityId() { return entityId; }
 }

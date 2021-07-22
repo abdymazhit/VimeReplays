@@ -37,20 +37,20 @@ public class ReplaySerializer extends Serializer<Replay> {
                 if(tickRecord instanceof MovingData) {
                     MovingData movingData = (MovingData) tickRecord;
                     output.writeByte((byte) 0);
-                    output.writeVarInt(movingData.getEntityId(), true);
-                    output.writeVarInt(movingData.getX(), true);
-                    output.writeVarInt(movingData.getY(), true);
-                    output.writeVarInt(movingData.getZ(), true);
-                    output.writeVarInt(movingData.getPitch(), true);
-                    output.writeVarInt(movingData.getYaw(), true);
+                    output.writeShort(movingData.getEntityId());
+                    output.writeShort(movingData.getX());
+                    output.writeShort(movingData.getY());
+                    output.writeShort(movingData.getZ());
+                    output.writeShort(movingData.getPitch());
+                    output.writeShort(movingData.getYaw());
                 } else if(tickRecord instanceof SneakingData) {
                     SneakingData sneakingData = (SneakingData) tickRecord;
                     output.writeByte((byte) 1);
-                    output.writeVarInt(sneakingData.getEntityId(), true);
+                    output.writeShort(sneakingData.getEntityId());
                 } else if(tickRecord instanceof UnsneakingData) {
                     UnsneakingData unsneakingData = (UnsneakingData) tickRecord;
                     output.writeByte((byte) 2);
-                    output.writeVarInt(unsneakingData.getEntityId(), true);
+                    output.writeShort(unsneakingData.getEntityId());
                 }
             }
         }
@@ -75,20 +75,20 @@ public class ReplaySerializer extends Serializer<Replay> {
             for(int i=0; i<tickRecordsSize; i++) {
                 byte dataType = input.readByte();
                 if (dataType == (byte) 0) {
-                    int entityId = input.readVarInt(true);
-                    int x = input.readVarInt(true);
-                    int y = input.readVarInt(true);
-                    int z = input.readVarInt(true);
-                    int pitch = input.readVarInt(true);
-                    int yaw = input.readVarInt(true);
+                    short entityId = input.readShort();
+                    short x = input.readShort();
+                    short y = input.readShort();
+                    short z = input.readShort();
+                    short pitch = input.readShort();
+                    short yaw = input.readShort();
 
                     tickRecords.add(new MovingData(entityId, x, y, z, pitch, yaw));
                 } else if (dataType == (byte) 1) {
-                    int entityId = input.readVarInt(true);
+                    short entityId = input.readShort();
 
                     tickRecords.add(new SneakingData(entityId));
                 } else if (dataType == (byte) 2) {
-                    int entityId = input.readVarInt(true);
+                    short entityId = input.readShort();
 
                     tickRecords.add(new UnsneakingData(entityId));
                 }

@@ -28,8 +28,8 @@ public class RecordingTools {
         VimeReplays.getRecordingManager().getReplay().records.put(currentTick, tickRecords);
     }
 
-    public int getPlayerId(String playerName) {
-        for(int id = 0; id < VimeReplays.getRecordingManager().getReplay().players.size(); id++) {
+    public short getPlayerId(String playerName) {
+        for(short id = 0; id < VimeReplays.getRecordingManager().getReplay().players.size(); id++) {
             String name = VimeReplays.getRecordingManager().getReplay().players.get(id);
             if(name.equals(playerName)) {
                 return id;
@@ -38,7 +38,7 @@ public class RecordingTools {
         return -1;
     }
 
-    public String getPlayerName(int playerId) {
+    public String getPlayerName(short playerId) {
         return VimeReplays.getRecordingManager().getReplay().players.get(playerId);
     }
 }

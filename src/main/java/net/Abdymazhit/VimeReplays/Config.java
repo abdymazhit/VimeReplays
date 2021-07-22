@@ -9,7 +9,6 @@ public class Config {
 
     public static Mode mode;
 
-    // Загрузить данные с конфиг файла
     public static void load() {
         config = VimeReplays.getInstance().getConfig();
         config.options().copyDefaults(true);
