@@ -5,10 +5,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import net.Abdymazhit.VimeReplays.replay.Replay;
-import net.Abdymazhit.VimeReplays.replay.data.MovingData;
-import net.Abdymazhit.VimeReplays.replay.data.RecordingData;
-import net.Abdymazhit.VimeReplays.replay.data.SneakingData;
-import net.Abdymazhit.VimeReplays.replay.data.UnsneakingData;
+import net.Abdymazhit.VimeReplays.replay.data.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,22 +32,45 @@ public class ReplaySerializer extends Serializer<Replay> {
 
             for(RecordingData tickRecord : tickRecords) {
                 if(tickRecord instanceof MovingData) {
-                    MovingData movingData = (MovingData) tickRecord;
+                    MovingData data = (MovingData) tickRecord;
                     output.writeByte((byte) 0);
-                    output.writeShort(movingData.getEntityId());
-                    output.writeShort(movingData.getX());
-                    output.writeShort(movingData.getY());
-                    output.writeShort(movingData.getZ());
-                    output.writeShort(movingData.getPitch());
-                    output.writeShort(movingData.getYaw());
+                    output.writeShort(data.getEntityId());
+                    output.writeShort(data.getX());
+                    output.writeShort(data.getY());
+                    output.writeShort(data.getZ());
+                    output.writeShort(data.getPitch());
+                    output.writeShort(data.getYaw());
                 } else if(tickRecord instanceof SneakingData) {
-                    SneakingData sneakingData = (SneakingData) tickRecord;
+                    SneakingData data = (SneakingData) tickRecord;
                     output.writeByte((byte) 1);
-                    output.writeShort(sneakingData.getEntityId());
+                    output.writeShort(data.getEntityId());
                 } else if(tickRecord instanceof UnsneakingData) {
-                    UnsneakingData unsneakingData = (UnsneakingData) tickRecord;
+                    UnsneakingData data = (UnsneakingData) tickRecord;
                     output.writeByte((byte) 2);
-                    output.writeShort(unsneakingData.getEntityId());
+                    output.writeShort(data.getEntityId());
+                } else if(tickRecord instanceof ItemHeldData) {
+                    ItemHeldData data = (ItemHeldData) tickRecord;
+                    output.writeByte((byte) 3);
+                    output.writeShort(data.getEntityId());
+                    output.writeByte(data.getItemId());
+                } else if(tickRecord instanceof BlockPlaceData) {
+                    BlockPlaceData data = (BlockPlaceData) tickRecord;
+                    output.writeByte((byte) 4);
+                    output.writeByte(data.getBlockId());
+                    output.writeShort(data.getX());
+                    output.writeShort(data.getY());
+                    output.writeShort(data.getZ());
+                } else if(tickRecord instanceof BlockBreakData) {
+                    BlockBreakData data = (BlockBreakData) tickRecord;
+                    output.writeByte((byte) 5);
+                    output.writeByte(data.getBlockId());
+                    output.writeShort(data.getX());
+                    output.writeShort(data.getY());
+                    output.writeShort(data.getZ());
+                } else if(tickRecord instanceof ArmSwingData) {
+                    ArmSwingData data = (ArmSwingData) tickRecord;
+                    output.writeByte((byte) 6);
+                    output.writeShort(data.getEntityId());
                 }
             }
         }
@@ -91,6 +111,29 @@ public class ReplaySerializer extends Serializer<Replay> {
                     short entityId = input.readShort();
 
                     tickRecords.add(new UnsneakingData(entityId));
+                } else if (dataType == (byte) 3) {
+                    short entityId = input.readShort();
+                    byte itemId = input.readByte();
+
+                    tickRecords.add(new ItemHeldData(entityId, itemId));
+                } else if (dataType == (byte) 4) {
+                    byte blockId = input.readByte();
+                    short x = input.readByte();
+                    short y = input.readByte();
+                    short z = input.readByte();
+
+                    tickRecords.add(new BlockPlaceData(blockId, x, y, z));
+                } else if (dataType == (byte) 5) {
+                    byte blockId = input.readByte();
+                    short x = input.readByte();
+                    short y = input.readByte();
+                    short z = input.readByte();
+
+                    tickRecords.add(new BlockBreakData(blockId, x, y, z));
+                } else if (dataType == (byte) 6) {
+                    short entityId = input.readShort();
+
+                    tickRecords.add(new ArmSwingData(entityId));
                 }
             }
 

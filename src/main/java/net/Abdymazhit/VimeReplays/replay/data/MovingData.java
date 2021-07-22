@@ -22,7 +22,9 @@ public class MovingData extends RecordingData implements Serializable {
         this.yaw = yaw;
     }
 
-    public short getEntityId() { return entityId; }
+    public short getEntityId() {
+        return entityId;
+    }
 
     public short getX() {
         return x;

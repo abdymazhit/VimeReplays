@@ -14,10 +14,12 @@ public class SneakDispatcher implements Listener {
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
 
-        if(event.isSneaking()) {
-            VimeReplays.getRecordingTools().addRecordingData(new SneakingData(VimeReplays.getRecordingTools().getPlayerId(player.getName())));
-        } else {
-            VimeReplays.getRecordingTools().addRecordingData(new UnsneakingData(VimeReplays.getRecordingTools().getPlayerId(player.getName())));
+        if(VimeReplays.getRecordingManager().getRecordablePlayers().contains(player)) {
+            if (event.isSneaking()) {
+                VimeReplays.getRecordingTools().addRecordingData(new SneakingData(VimeReplays.getRecordingTools().getPlayerId(player.getName())));
+            } else {
+                VimeReplays.getRecordingTools().addRecordingData(new UnsneakingData(VimeReplays.getRecordingTools().getPlayerId(player.getName())));
+            }
         }
     }
 }

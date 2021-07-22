@@ -3,10 +3,11 @@ package net.Abdymazhit.VimeReplays.managers;
 import net.Abdymazhit.VimeReplays.Config;
 import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.customs.StatusCode;
-import net.Abdymazhit.VimeReplays.dispatcher.events.SneakDispatcher;
+import net.Abdymazhit.VimeReplays.dispatcher.events.*;
 import net.Abdymazhit.VimeReplays.dispatcher.packets.PacketsListener;
 import net.Abdymazhit.VimeReplays.dispatcher.ticks.MovingDispatcher;
 import net.Abdymazhit.VimeReplays.replay.Replay;
+import net.Abdymazhit.VimeReplays.replay.data.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitTask;
@@ -14,6 +15,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecordingManager {
 
@@ -26,6 +28,10 @@ public class RecordingManager {
     private BukkitTask playerMoveDispatcherTask;
 
     private SneakDispatcher sneakDispatcher;
+    private ArmSwingDispatcher armSwingDispatcher;
+    private BlockPlaceDispatcher blockPlaceDispatcher;
+    private BlockBreakDispatcher blockBreakDispatcher;
+    private ItemHeldDispatcher itemHeldDispatcher;
 
     public StatusCode startRecording(String gameName, String gameType, String mapName, List<Player> players) {
         byte gameNameId = Config.getGameNameIdByString(gameName);
@@ -64,8 +70,16 @@ public class RecordingManager {
         playerMoveDispatcherTask = new MovingDispatcher().runTaskTimer(VimeReplays.getInstance(), 0L, 1L);
 
         sneakDispatcher = new SneakDispatcher();
+        armSwingDispatcher = new ArmSwingDispatcher();
+        blockPlaceDispatcher = new BlockPlaceDispatcher();
+        blockBreakDispatcher = new BlockBreakDispatcher();
+        itemHeldDispatcher = new ItemHeldDispatcher();
 
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(sneakDispatcher, VimeReplays.getInstance());
+        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(armSwingDispatcher, VimeReplays.getInstance());
+        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(blockPlaceDispatcher, VimeReplays.getInstance());
+        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(blockBreakDispatcher, VimeReplays.getInstance());
+        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(itemHeldDispatcher, VimeReplays.getInstance());
 
         return StatusCode.OK;
     }
@@ -77,6 +91,10 @@ public class RecordingManager {
 
         playerMoveDispatcherTask.cancel();
         HandlerList.unregisterAll(sneakDispatcher);
+        HandlerList.unregisterAll(armSwingDispatcher);
+        HandlerList.unregisterAll(blockPlaceDispatcher);
+        HandlerList.unregisterAll(blockBreakDispatcher);
+        HandlerList.unregisterAll(itemHeldDispatcher);
         ticksDispatcherTask.cancel();
 
         VimeReplays.getFileUtils().saveFile(replay);
