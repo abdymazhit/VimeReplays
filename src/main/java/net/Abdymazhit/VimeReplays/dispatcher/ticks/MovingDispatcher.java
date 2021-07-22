@@ -10,18 +10,23 @@ import java.util.Map;
 
 public class MovingDispatcher extends BukkitRunnable {
 
-    private Map<Integer, MovingData> playerLastLocation;
+    private Map<Short, MovingData> playerLastLocation;
 
     @Override
     public void run() {
         for(Player player : VimeReplays.getRecordingManager().getRecordablePlayers()) {
-            int x = Integer.parseInt(String.format("%.2f", player.getLocation().getX()).replace(",", ""));
-            int y = Integer.parseInt(String.format("%.2f", player.getLocation().getY()).replace(",", ""));
-            int z = Integer.parseInt(String.format("%.2f", player.getLocation().getZ()).replace(",", ""));
-            int pitch = Integer.parseInt(String.format("%.2f", player.getLocation().getPitch()).replace(",", ""));
-            int yaw = Integer.parseInt(String.format("%.2f", player.getLocation().getYaw()).replace(",", ""));
+            short playerId = VimeReplays.getRecordingTools().getPlayerId(player.getName());
 
-            int playerId = VimeReplays.getRecordingTools().getPlayerId(player.getName());
+            short x = Short.parseShort(String.format("%.2f", player.getLocation().getX()).replace(",", ""));
+            short y = Short.parseShort(String.format("%.2f", player.getLocation().getY()).replace(",", ""));
+            short z = Short.parseShort(String.format("%.2f", player.getLocation().getZ()).replace(",", ""));
+
+            double pitchRadian = Math.toRadians(player.getLocation().getPitch());
+            short pitch = (short) (pitchRadian * 160);
+
+            double yawRadian = Math.toRadians(player.getLocation().getYaw());
+            short yaw = (short) (yawRadian * 160);
+
             MovingData movingData = new MovingData(playerId, x, y, z, pitch, yaw);
 
             if(playerLastLocation == null) {

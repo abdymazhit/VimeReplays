@@ -4,12 +4,9 @@ import net.Abdymazhit.VimeReplays.Config;
 import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.customs.StatusCode;
 import net.Abdymazhit.VimeReplays.dispatcher.events.SneakDispatcher;
+import net.Abdymazhit.VimeReplays.dispatcher.packets.PacketsListener;
 import net.Abdymazhit.VimeReplays.dispatcher.ticks.MovingDispatcher;
 import net.Abdymazhit.VimeReplays.replay.Replay;
-import net.Abdymazhit.VimeReplays.replay.data.MovingData;
-import net.Abdymazhit.VimeReplays.replay.data.RecordingData;
-import net.Abdymazhit.VimeReplays.replay.data.SneakingData;
-import net.Abdymazhit.VimeReplays.replay.data.UnsneakingData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitTask;
@@ -17,12 +14,13 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RecordingManager {
 
     private List<Player> recordablePlayers;
     private Replay replay;
+
+    private PacketsListener packetsListener;
 
     private BukkitTask ticksDispatcherTask;
     private BukkitTask playerMoveDispatcherTask;
@@ -50,9 +48,12 @@ public class RecordingManager {
             return StatusCode.NoPlayersError;
         }
 
+        packetsListener = new PacketsListener();
+
         List<String> playersId = new ArrayList<>();
         for(Player player : players) {
             playersId.add(player.getName());
+            packetsListener.addPlayer(player);
         }
 
         replay = new Replay(gameNameId, gameTypeId, mapNameId, playersId, new HashMap<>());
@@ -70,6 +71,10 @@ public class RecordingManager {
     }
 
     public void stopRecording() {
+        for(Player player : VimeReplays.getRecordingManager().getRecordablePlayers()) {
+            packetsListener.removePlayer(player);
+        }
+
         playerMoveDispatcherTask.cancel();
         HandlerList.unregisterAll(sneakDispatcher);
         ticksDispatcherTask.cancel();
@@ -78,28 +83,6 @@ public class RecordingManager {
 
         // Проверка десериализации
         Replay replay = VimeReplays.getFileUtils().readFile();
-        Map<Integer, List<RecordingData>> records = replay.records;
-        for(int tick = 0; tick < records.size(); tick++) {
-            List<RecordingData> tickRecords = records.get(tick);
-
-            for(RecordingData recordingData : tickRecords) {
-                if(recordingData instanceof MovingData) {
-                    MovingData movingData = (MovingData) recordingData;
-                    System.out.println("Moving: " + movingData.getEntityId() + ", " +
-                            movingData.getX() + ", " +
-                            movingData.getY() + ", " +
-                            movingData.getZ() + ", " +
-                            movingData.getPitch() + ", " +
-                            movingData.getYaw() + ", ");
-                } else if (recordingData instanceof SneakingData) {
-                    SneakingData sneakingData = (SneakingData) recordingData;
-                    System.out.println("Sneaking: " + sneakingData.getEntityId());
-                } else if (recordingData instanceof UnsneakingData) {
-                    UnsneakingData unsneakingData = (UnsneakingData) recordingData;
-                    System.out.println("Unsneaking: " + unsneakingData.getEntityId());
-                }
-            }
-        }
     }
 
     public List<Player> getRecordablePlayers() {
@@ -109,4 +92,6 @@ public class RecordingManager {
     public Replay getReplay() {
         return replay;
     }
+
+    public PacketsListener getPacketsListener() { return packetsListener; }
 }
