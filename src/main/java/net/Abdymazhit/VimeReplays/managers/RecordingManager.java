@@ -103,6 +103,10 @@ public class RecordingManager {
         Replay replay = VimeReplays.getFileUtils().readFile();
     }
 
+    public void removeRecordablePlayer(Player player) {
+        recordablePlayers.remove(player);
+    }
+
     public List<Player> getRecordablePlayers() {
         return recordablePlayers;
     }

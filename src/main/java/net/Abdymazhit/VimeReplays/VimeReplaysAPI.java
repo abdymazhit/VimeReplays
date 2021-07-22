@@ -13,4 +13,8 @@ public class VimeReplaysAPI {
     public static void stopRecording() {
         VimeReplays.getRecordingManager().stopRecording();
     }
+
+    public static void removeRecordablePlayer(Player player) {
+        VimeReplays.getRecordingManager().removeRecordablePlayer(player);
+    }
 }
