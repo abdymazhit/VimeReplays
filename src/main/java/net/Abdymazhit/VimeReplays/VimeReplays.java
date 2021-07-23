@@ -1,7 +1,7 @@
 package net.Abdymazhit.VimeReplays;
 
 import net.Abdymazhit.VimeReplays.customs.Mode;
-import net.Abdymazhit.VimeReplays.playing.PlayManager;
+import net.Abdymazhit.VimeReplays.playing.PlayingManager;
 import net.Abdymazhit.VimeReplays.recording.RecordingManager;
 import net.Abdymazhit.VimeReplays.utils.FileUtils;
 import net.Abdymazhit.VimeReplays.utils.ItemStorage;
@@ -11,7 +11,7 @@ public class VimeReplays extends JavaPlugin {
 
     private static VimeReplays instance;
 
-    private static PlayManager playManager;
+    private static PlayingManager playingManager;
     private static RecordingManager recordingManager;
     private static FileUtils fileUtils;
     private static ItemStorage itemStorage;
@@ -27,7 +27,7 @@ public class VimeReplays extends JavaPlugin {
         if(Config.mode.equals(Mode.RECORDER)) {
             recordingManager = new RecordingManager();
         } else if(Config.mode.equals(Mode.PLAYER)) {
-            playManager = new PlayManager();
+            playingManager = new PlayingManager("Duels", "Арена");
         }
     }
 
@@ -42,7 +42,7 @@ public class VimeReplays extends JavaPlugin {
 
     public static RecordingManager getRecordingManager() { return recordingManager; }
 
-    public static PlayManager getPlayManager() { return playManager; }
+    public static PlayingManager getPlayingManager() { return playingManager; }
 
     public static FileUtils getFileUtils() { return fileUtils; }
 

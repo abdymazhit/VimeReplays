@@ -2,11 +2,11 @@ package net.Abdymazhit.VimeReplays.replay.data;
 
 import java.io.Serializable;
 
-public class ArmSwingData extends RecordingData implements Serializable {
+public class RemovePlayerData extends RecordingData implements Serializable {
 
     private final short entityId;
 
-    public ArmSwingData(short entityId) {
+    public RemovePlayerData(short entityId) {
         this.entityId = entityId;
     }
 

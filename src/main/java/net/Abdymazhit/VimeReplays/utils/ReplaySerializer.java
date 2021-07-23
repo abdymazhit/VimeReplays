@@ -71,6 +71,14 @@ public class ReplaySerializer extends Serializer<Replay> {
                     ArmSwingData data = (ArmSwingData) tickRecord;
                     output.writeByte((byte) 6);
                     output.writeShort(data.getEntityId());
+                } else if(tickRecord instanceof AddPlayerData) {
+                    AddPlayerData data = (AddPlayerData) tickRecord;
+                    output.writeByte((byte) 7);
+                    output.writeShort(data.getEntityId());
+                } else if(tickRecord instanceof RemovePlayerData) {
+                    RemovePlayerData data = (RemovePlayerData) tickRecord;
+                    output.writeByte((byte) 8);
+                    output.writeShort(data.getEntityId());
                 }
             }
         }
@@ -134,6 +142,14 @@ public class ReplaySerializer extends Serializer<Replay> {
                     short entityId = input.readShort();
 
                     tickRecords.add(new ArmSwingData(entityId));
+                } else if (dataType == (byte) 7) {
+                    short entityId = input.readShort();
+
+                    tickRecords.add(new AddPlayerData(entityId));
+                } else if (dataType == (byte) 8) {
+                    short entityId = input.readShort();
+
+                    tickRecords.add(new RemovePlayerData(entityId));
                 }
             }
 

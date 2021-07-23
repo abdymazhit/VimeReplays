@@ -18,14 +18,14 @@ import java.nio.file.Paths;
 
 public class FileUtils {
 
-    private int size;
-
     public void saveFile(Replay replay) {
         serialize(replay);
         compress();
+        upload();
     }
 
     public Replay readFile() {
+        download();
         decompress();
         return deserialize();
     }
@@ -53,10 +53,9 @@ public class FileUtils {
     private void compress() {
         try {
             byte[] data = Files.readAllBytes(Paths.get(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.replay"));
-            size = data.length;
             byte[] compressed = Zstd.compress(data);
 
-            RandomAccessFile raf = new RandomAccessFile(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.rep", "rw");
+            RandomAccessFile raf = new RandomAccessFile(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game_" + data.length + ".rep", "rw");
             FileOutputStream fileOutputStream = new FileOutputStream(raf.getFD());
             fileOutputStream.write(compressed);
             fileOutputStream.close();
@@ -73,23 +72,46 @@ public class FileUtils {
         }
     }
 
+    public void upload() {
+
+    }
+
+    public void download() {
+
+    }
+
     private void decompress() {
         try {
-            byte[] compressed = Files.readAllBytes(Paths.get(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.rep"));
-            byte[] decompressed = Zstd.decompress(compressed, size);
+            String path = null;
 
-            File file = new File(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.rep");
-            if(file.delete()) {
-                System.out.println("Файл rep был удален");
-            }
-            else {
-                System.out.println("Файл rep не найден");
+            File root = new File(Bukkit.getWorldContainer() + "/plugins/VimeReplays/");
+            FilenameFilter beginsWith = (directory, filename) -> filename.startsWith("game_");
+            File[] files = root.listFiles(beginsWith);
+            if(files != null) {
+                for (File f: files) {
+                    path = f.getPath();
+                }
             }
 
-            RandomAccessFile raf = new RandomAccessFile(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.replay", "rw");
-            FileOutputStream fileOutputStream = new FileOutputStream(raf.getFD());
-            fileOutputStream.write(decompressed);
-            fileOutputStream.close();
+            if(path != null) {
+                String size = path.split("_")[1].replace(".rep", "");
+
+                byte[] compressed = Files.readAllBytes(Paths.get(path));
+                byte[] decompressed = Zstd.decompress(compressed, Integer.parseInt(size));
+
+                File file = new File(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.rep");
+                if(file.delete()) {
+                    System.out.println("Файл rep был удален");
+                }
+                else {
+                    System.out.println("Файл rep не найден");
+                }
+
+                RandomAccessFile raf = new RandomAccessFile(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.replay", "rw");
+                FileOutputStream fileOutputStream = new FileOutputStream(raf.getFD());
+                fileOutputStream.write(decompressed);
+                fileOutputStream.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
