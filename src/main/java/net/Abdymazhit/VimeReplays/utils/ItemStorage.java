@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ItemStorage {
 
-    private Map<Material, Map<Integer, Integer>> items;
+    private final Map<Material, Map<Integer, Integer>> items;
 
     public ItemStorage() {
         items = new HashMap<>();

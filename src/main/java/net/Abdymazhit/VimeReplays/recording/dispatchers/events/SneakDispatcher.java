@@ -1,4 +1,4 @@
-package net.Abdymazhit.VimeReplays.dispatcher.events;
+package net.Abdymazhit.VimeReplays.recording.dispatchers.events;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.replay.data.SneakingData;
@@ -16,9 +16,9 @@ public class SneakDispatcher implements Listener {
 
         if(VimeReplays.getRecordingManager().getRecordablePlayers().contains(player)) {
             if (event.isSneaking()) {
-                VimeReplays.getRecordingTools().addRecordingData(new SneakingData(VimeReplays.getRecordingTools().getPlayerId(player.getName())));
+                VimeReplays.getRecordingManager().addRecordingData(new SneakingData(VimeReplays.getRecordingManager().getPlayerId(player.getName())));
             } else {
-                VimeReplays.getRecordingTools().addRecordingData(new UnsneakingData(VimeReplays.getRecordingTools().getPlayerId(player.getName())));
+                VimeReplays.getRecordingManager().addRecordingData(new UnsneakingData(VimeReplays.getRecordingManager().getPlayerId(player.getName())));
             }
         }
     }

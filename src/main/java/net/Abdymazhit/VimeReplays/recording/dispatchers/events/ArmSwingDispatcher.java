@@ -1,4 +1,4 @@
-package net.Abdymazhit.VimeReplays.dispatcher.events;
+package net.Abdymazhit.VimeReplays.recording.dispatchers.events;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.replay.data.ArmSwingData;
@@ -16,7 +16,7 @@ public class ArmSwingDispatcher implements Listener {
 
         if(VimeReplays.getRecordingManager().getRecordablePlayers().contains(player)) {
             if (e.getAnimationType().equals(PlayerAnimationType.ARM_SWING)) {
-                VimeReplays.getRecordingTools().addRecordingData(new ArmSwingData(VimeReplays.getRecordingTools().getPlayerId(player.getName())));
+                VimeReplays.getRecordingManager().addRecordingData(new ArmSwingData(VimeReplays.getRecordingManager().getPlayerId(player.getName())));
             }
         }
     }

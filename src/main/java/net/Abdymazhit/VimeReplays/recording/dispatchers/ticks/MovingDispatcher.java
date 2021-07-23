@@ -1,4 +1,4 @@
-package net.Abdymazhit.VimeReplays.dispatcher.ticks;
+package net.Abdymazhit.VimeReplays.recording.dispatchers.ticks;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.replay.data.MovingData;
@@ -15,7 +15,7 @@ public class MovingDispatcher extends BukkitRunnable {
     @Override
     public void run() {
         for(Player player : VimeReplays.getRecordingManager().getRecordablePlayers()) {
-            short playerId = VimeReplays.getRecordingTools().getPlayerId(player.getName());
+            short playerId = VimeReplays.getRecordingManager().getPlayerId(player.getName());
 
             short x = Short.parseShort(String.format("%.2f", player.getLocation().getX()).replace(",", ""));
             short y = Short.parseShort(String.format("%.2f", player.getLocation().getY()).replace(",", ""));
@@ -38,11 +38,11 @@ public class MovingDispatcher extends BukkitRunnable {
 
                 if(lastMovingData.getX() != x || lastMovingData.getY() != y || lastMovingData.getZ() != z || lastMovingData.getPitch() != pitch || lastMovingData.getYaw() != yaw) {
                     playerLastLocation.put(playerId, movingData);
-                    VimeReplays.getRecordingTools().addRecordingData(movingData);
+                    VimeReplays.getRecordingManager().addRecordingData(movingData);
                 }
             } else {
                 playerLastLocation.put(playerId, movingData);
-                VimeReplays.getRecordingTools().addRecordingData(movingData);
+                VimeReplays.getRecordingManager().addRecordingData(movingData);
             }
         }
     }

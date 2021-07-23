@@ -17,7 +17,7 @@ public class Config {
         String mode = config.getString("mode");
         if(mode.equals("RECORDER")) {
             Config.mode = Mode.RECORDER;
-        } else if(mode.equals("PLAYER]")) {
+        } else if(mode.equals("PLAYER")) {
             Config.mode = Mode.PLAYER;
         } else {
             throw new IllegalArgumentException("Ошибка режима плагина. Установите mode на RECORDER или PLAYER режим в plugin.yml");

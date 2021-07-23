@@ -1,4 +1,4 @@
-package net.Abdymazhit.VimeReplays.dispatcher.packets;
+package net.Abdymazhit.VimeReplays.recording.dispatchers.packets;
 
 import io.netty.channel.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

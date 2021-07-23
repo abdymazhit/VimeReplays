@@ -1,4 +1,4 @@
-package net.Abdymazhit.VimeReplays.dispatcher.events;
+package net.Abdymazhit.VimeReplays.recording.dispatchers.events;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.replay.data.BlockBreakData;
@@ -17,7 +17,7 @@ public class BlockBreakDispatcher implements Listener {
         if(VimeReplays.getRecordingManager().getRecordablePlayers().contains(player)) {
             if(!event.isCancelled()) {
                 Block block = event.getBlock();
-                VimeReplays.getRecordingTools().addRecordingData(new BlockBreakData((byte) block.getTypeId(), (short) block.getX(), (short) block.getY(), (short) block.getZ()));
+                VimeReplays.getRecordingManager().addRecordingData(new BlockBreakData((byte) block.getTypeId(), (short) block.getX(), (short) block.getY(), (short) block.getZ()));
             }
         }
     }
