@@ -44,8 +44,8 @@ public class ReplaySerializer extends Serializer<Replay> {
                     output.writeShort(data.getX());
                     output.writeShort(data.getY());
                     output.writeShort(data.getZ());
-                    output.writeShort(data.getPitch());
                     output.writeShort(data.getYaw());
+                    output.writeShort(data.getPitch());
                 } else if(tickRecord instanceof SneakingData) {
                     SneakingData data = (SneakingData) tickRecord;
                     output.writeByte((byte) 1);
@@ -84,8 +84,8 @@ public class ReplaySerializer extends Serializer<Replay> {
                     output.writeShort(data.getX());
                     output.writeShort(data.getY());
                     output.writeShort(data.getZ());
-                    output.writeShort(data.getPitch());
                     output.writeShort(data.getYaw());
+                    output.writeShort(data.getPitch());
                 } else if(tickRecord instanceof RemovePlayerData) {
                     RemovePlayerData data = (RemovePlayerData) tickRecord;
                     output.writeByte((byte) 8);
@@ -126,10 +126,10 @@ public class ReplaySerializer extends Serializer<Replay> {
                     short x = input.readShort();
                     short y = input.readShort();
                     short z = input.readShort();
-                    short pitch = input.readShort();
                     short yaw = input.readShort();
+                    short pitch = input.readShort();
 
-                    tickRecords.add(new MovingData(entityId, x, y, z, pitch, yaw));
+                    tickRecords.add(new MovingData(entityId, x, y, z, yaw, pitch));
                 } else if (dataType == (byte) 1) {
                     short entityId = input.readShort();
 
@@ -166,10 +166,10 @@ public class ReplaySerializer extends Serializer<Replay> {
                     short x = input.readShort();
                     short y = input.readShort();
                     short z = input.readShort();
-                    short pitch = input.readShort();
                     short yaw = input.readShort();
+                    short pitch = input.readShort();
 
-                    tickRecords.add(new AddPlayerData(entityId, x, y, z, pitch, yaw));
+                    tickRecords.add(new AddPlayerData(entityId, x, y, z, yaw, pitch));
                 } else if (dataType == (byte) 8) {
                     short entityId = input.readShort();
 

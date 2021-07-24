@@ -16,7 +16,6 @@ import org.bukkit.WorldCreator;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,15 +27,13 @@ public class PlayingManager {
     private final PlayingTool playingTool;
     private final PlayingHandler playingHandler;
 
-    private final BukkitTask actionBarTask;
-
     public PlayingManager(String gameName, String mapName) {
         replay = VimeReplays.getFileUtils().readFile();
         playingItems = new PlayingItems();
         playingTool = new PlayingTool();
         playingHandler = new PlayingHandler();
 
-        actionBarTask = startActionBarTask();
+        startActionBarTask();
 
         setupMap(gameName, mapName);
 
@@ -73,11 +70,12 @@ public class PlayingManager {
         Bukkit.createWorld(wc);
     }
 
-    private BukkitTask startActionBarTask() {
-        return new BukkitRunnable() {
+    private void startActionBarTask() {
+        new BukkitRunnable() {
             @Override
             public void run() {
-                for(Player player : Bukkit.getOnlinePlayers()) {
+                if(getPlayingTool().getPlayer() != null) {
+                    Player player = getPlayingTool().getPlayer();
                     String message = "";
 
                     PlayingStatus playingStatus = VimeReplays.getPlayingManager().getPlayingTool().getPlayingStatus();

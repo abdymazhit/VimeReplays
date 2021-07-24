@@ -15,25 +15,31 @@ public class PlayerJoinEventListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        VimeReplays.getPlayingManager().getPlayingTool().setPlayer(player);
+        if(Bukkit.getOnlinePlayers().size() > 1) {
+            player.kickPlayer("Ошибка подключения! Сервер занят другим игроком!");
+        } else {
+            VimeReplays.getPlayingManager().getPlayingTool().setPlayer(player);
 
-        Location spawn = Bukkit.getWorld("replayMap").getSpawnLocation();
-        player.teleport(spawn);
+            Location spawn = Bukkit.getWorld("replayMap").getSpawnLocation();
+            player.teleport(spawn);
 
-        player.setExp(0);
-        player.setLevel(0);
-        player.setFireTicks(0);
-        player.setMaxHealth(20.0);
-        player.setHealth(20.0);
-        player.setFoodLevel(20);
-        player.setSaturation(10);
+            player.setExp(0);
+            player.setLevel(0);
+            player.setFireTicks(0);
+            player.setMaxHealth(20.0);
+            player.setHealth(20.0);
+            player.setFoodLevel(20);
+            player.setSaturation(10);
 
-        player.setGameMode(GameMode.ADVENTURE);
+            player.setGameMode(GameMode.ADVENTURE);
 
-        player.setAllowFlight(true);
-        player.setFlying(true);
-        player.setFlySpeed(0.1f);
+            player.setAllowFlight(true);
+            player.setFlying(true);
+            player.setFlySpeed(0.1f);
 
-        VimeReplays.getPlayingManager().getPlayingItems().giveItems(player);
+            VimeReplays.getPlayingManager().getPlayingItems().giveItems(player);
+
+            VimeReplays.getPlayingManager().getPlayingTool().performFirstTickActions();
+        }
     }
 }

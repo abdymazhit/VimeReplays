@@ -47,6 +47,11 @@ public class PlayingTool {
         VimeReplays.getPlayingManager().getPlayingItems().givePlayItem(player);
     }
 
+    public void performFirstTickActions() {
+        List<RecordingData> tickRecords = VimeReplays.getPlayingManager().getReplay().records.get(0);
+        VimeReplays.getPlayingManager().getPlayingHandler().performAction(tickRecords);
+    }
+
     private void performTickActions() {
         List<RecordingData> tickRecords = VimeReplays.getPlayingManager().getReplay().records.get(currentTick);
         VimeReplays.getPlayingManager().getPlayingHandler().performAction(tickRecords);
@@ -75,6 +80,7 @@ public class PlayingTool {
         playingStatus = PlayingStatus.PAUSE;
         scheduler.cancel(true);
         VimeReplays.getPlayingManager().getPlayingItems().givePauseItem(player);
+        VimeReplays.getPlayingManager().getPlayingTool().performFirstTickActions();
     }
 
     public void minusPlayingSpeed() {

@@ -24,16 +24,13 @@ public class PlayingHandler {
                 MovingData data = (MovingData) recordingData;
 
                 EntityPlayer npc = npcMap.get(data.getEntityId());
-                double x = data.getX();
-                double y = data.getY();
-                double z = data.getZ();
-                float pitchRadian = data.getPitch();
-                float yawRadian = data.getYaw();
+                double x = VimeReplays.getLocationUtils().getLocationDouble(data.getX());
+                double y = VimeReplays.getLocationUtils().getLocationDouble(data.getY());
+                double z = VimeReplays.getLocationUtils().getLocationDouble(data.getZ());
+                float yaw = VimeReplays.getLocationUtils().getLocationFloat(data.getYaw());
+                float pitch = VimeReplays.getLocationUtils().getLocationFloat(data.getPitch());
 
-                float pitch = (float) Math.toDegrees(pitchRadian / 160);
-                float yaw = (float) Math.toDegrees(yawRadian / 160);
-
-                npcManager.teleport(npc, x / 100, y / 100, z / 100, pitch, yaw);
+                npcManager.teleport(npc, x, y, z, yaw, pitch);
             } else if(recordingData instanceof SneakingData) {
                 SneakingData data = (SneakingData) recordingData;
 
@@ -57,18 +54,24 @@ public class PlayingHandler {
             } else if(recordingData instanceof AddPlayerData) {
                 AddPlayerData data = (AddPlayerData) recordingData;
                 if(!npcMap.containsKey(data.getEntityId())) {
-                    double x = data.getX();
-                    double y = data.getY();
-                    double z = data.getZ();
-                    float pitchRadian = data.getPitch();
-                    float yawRadian = data.getYaw();
+                    double x = VimeReplays.getLocationUtils().getLocationDouble(data.getX());
+                    double y = VimeReplays.getLocationUtils().getLocationDouble(data.getY());
+                    double z = VimeReplays.getLocationUtils().getLocationDouble(data.getZ());
+                    float yaw = VimeReplays.getLocationUtils().getLocationFloat(data.getYaw());
+                    float pitch = VimeReplays.getLocationUtils().getLocationFloat(data.getPitch());
 
-                    float pitch = (float) Math.toDegrees(pitchRadian / 160);
-                    float yaw = (float) Math.toDegrees(yawRadian / 160);
-
-                    EntityPlayer entityPlayer = npcManager.create(getPlayerName(data.getEntityId()), x / 100, y / 100, z / 100, pitch, yaw);
+                    EntityPlayer entityPlayer = npcManager.create(getPlayerName(data.getEntityId()), x, y, z, yaw, pitch);
 
                     npcMap.put(data.getEntityId(), entityPlayer);
+                } else {
+                    EntityPlayer npc = npcMap.get(data.getEntityId());
+                    double x = VimeReplays.getLocationUtils().getLocationDouble(data.getX());
+                    double y = VimeReplays.getLocationUtils().getLocationDouble(data.getY());
+                    double z = VimeReplays.getLocationUtils().getLocationDouble(data.getZ());
+                    float yaw = VimeReplays.getLocationUtils().getLocationFloat(data.getYaw());
+                    float pitch = VimeReplays.getLocationUtils().getLocationFloat(data.getPitch());
+
+                    npcManager.teleport(npc, x, y, z, yaw, pitch);
                 }
             } else if(recordingData instanceof RemovePlayerData) {
                 RemovePlayerData data = (RemovePlayerData) recordingData;

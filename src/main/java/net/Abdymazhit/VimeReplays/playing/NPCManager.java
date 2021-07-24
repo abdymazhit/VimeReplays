@@ -1,6 +1,7 @@
 package net.Abdymazhit.VimeReplays.playing;
 
 import com.mojang.authlib.GameProfile;
+import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 public class NPCManager {
 
-    public EntityPlayer create(String playerName, double x, double y, double z, float pitch, float yaw) {
+    public EntityPlayer create(String playerName, double x, double y, double z, float yaw, float pitch) {
         MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
         WorldServer nmsWorld = ((CraftWorld) Bukkit.getWorld("replayMap")).getHandle();
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), playerName);
@@ -31,7 +32,7 @@ public class NPCManager {
         return npc;
     }
 
-    public void teleport(EntityPlayer npc, double x, double y, double z, float pitch, float yaw) {
+    public void teleport(EntityPlayer npc, double x, double y, double z, float yaw, float pitch) {
         PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport();
         setValue(packet, "a", npc.getId());
         setValue(packet, "b", getFixLocation(x));
@@ -75,9 +76,7 @@ public class NPCManager {
     }
 
     public void sendPacket(Packet<?> packet) {
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-        }
+        ((CraftPlayer) VimeReplays.getPlayingManager().getPlayingTool().getPlayer()).getHandle().playerConnection.sendPacket(packet);
     }
 
     public int getFixLocation(double d) {

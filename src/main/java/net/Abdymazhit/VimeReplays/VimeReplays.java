@@ -5,6 +5,7 @@ import net.Abdymazhit.VimeReplays.playing.PlayingManager;
 import net.Abdymazhit.VimeReplays.recording.RecordingManager;
 import net.Abdymazhit.VimeReplays.utils.FileUtils;
 import net.Abdymazhit.VimeReplays.utils.ItemStorage;
+import net.Abdymazhit.VimeReplays.utils.LocationUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class VimeReplays extends JavaPlugin {
@@ -15,6 +16,7 @@ public class VimeReplays extends JavaPlugin {
     private static RecordingManager recordingManager;
     private static FileUtils fileUtils;
     private static ItemStorage itemStorage;
+    private static LocationUtils locationUtils;
 
     @Override
     public void onEnable() {
@@ -23,6 +25,7 @@ public class VimeReplays extends JavaPlugin {
 
         fileUtils = new FileUtils();
         itemStorage = new ItemStorage();
+        locationUtils = new LocationUtils();
 
         if(Config.mode.equals(Mode.RECORDER)) {
             recordingManager = new RecordingManager();
@@ -47,4 +50,6 @@ public class VimeReplays extends JavaPlugin {
     public static FileUtils getFileUtils() { return fileUtils; }
 
     public static ItemStorage getItemStorage() { return itemStorage; }
+
+    public static LocationUtils getLocationUtils() { return locationUtils; }
 }

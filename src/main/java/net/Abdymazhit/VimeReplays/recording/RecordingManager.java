@@ -28,7 +28,7 @@ public class RecordingManager {
     private PacketsListener packetsListener;
 
     private BukkitTask ticksDispatcherTask;
-    private BukkitTask playerMoveDispatcherTask;
+    private BukkitTask movingDispatcherTask;
 
     public StatusCode startRecording(String gameName, String gameType, String mapName, List<Player> players) {
         byte gameNameId = Config.getGameNameIdByString(gameName);
@@ -63,7 +63,7 @@ public class RecordingManager {
 
         addStartingPlayers();
         ticksDispatcherTask = startRecordingTicksTask();
-        playerMoveDispatcherTask = new MovingDispatcher().runTaskTimer(VimeReplays.getInstance(), 0L, 1L);
+        movingDispatcherTask = new MovingDispatcher().runTaskTimer(VimeReplays.getInstance(), 0L, 1L);
 
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new SneakDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new ArmSwingDispatcher(), VimeReplays.getInstance());
@@ -79,17 +79,13 @@ public class RecordingManager {
         for(Player player : getRecordablePlayers()) {
             short playerId = getPlayerId(player.getName());
 
-            short x = Short.parseShort(String.format("%.2f", player.getLocation().getX()).replace(",", ""));
-            short y = Short.parseShort(String.format("%.2f", player.getLocation().getY()).replace(",", ""));
-            short z = Short.parseShort(String.format("%.2f", player.getLocation().getZ()).replace(",", ""));
+            short x = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getX());
+            short y = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getY());
+            short z = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getZ());
+            short yaw = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getYaw());
+            short pitch = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getPitch());
 
-            double pitchRadian = Math.toRadians(player.getLocation().getPitch());
-            short pitch = (short) (pitchRadian * 160);
-
-            double yawRadian = Math.toRadians(player.getLocation().getYaw());
-            short yaw = (short) (yawRadian * 160);
-
-            tickRecords.add(new AddPlayerData(playerId, x, y, z, pitch, yaw));
+            tickRecords.add(new AddPlayerData(playerId, x, y, z, yaw, pitch));
         }
         VimeReplays.getRecordingManager().getReplay().records.put(0, tickRecords);
     }
@@ -99,7 +95,7 @@ public class RecordingManager {
             packetsListener.removePlayer(player);
         }
 
-        playerMoveDispatcherTask.cancel();
+        movingDispatcherTask.cancel();
         HandlerList.unregisterAll();
         ticksDispatcherTask.cancel();
 

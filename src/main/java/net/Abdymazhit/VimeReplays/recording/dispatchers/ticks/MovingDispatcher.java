@@ -17,17 +17,13 @@ public class MovingDispatcher extends BukkitRunnable {
         for(Player player : VimeReplays.getRecordingManager().getRecordablePlayers()) {
             short playerId = VimeReplays.getRecordingManager().getPlayerId(player.getName());
 
-            short x = Short.parseShort(String.format("%.2f", player.getLocation().getX()).replace(",", ""));
-            short y = Short.parseShort(String.format("%.2f", player.getLocation().getY()).replace(",", ""));
-            short z = Short.parseShort(String.format("%.2f", player.getLocation().getZ()).replace(",", ""));
+            short x = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getX());
+            short y = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getY());
+            short z = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getZ());
+            short yaw = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getYaw());
+            short pitch = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getPitch());
 
-            double pitchRadian = Math.toRadians(player.getLocation().getPitch());
-            short pitch = (short) (pitchRadian * 160);
-
-            double yawRadian = Math.toRadians(player.getLocation().getYaw());
-            short yaw = (short) (yawRadian * 160);
-
-            MovingData movingData = new MovingData(playerId, x, y, z, pitch, yaw);
+            MovingData movingData = new MovingData(playerId, x, y, z, yaw, pitch);
 
             if(playerLastLocation == null) {
                 playerLastLocation = new HashMap<>();
@@ -36,7 +32,7 @@ public class MovingDispatcher extends BukkitRunnable {
             if(playerLastLocation.containsKey(playerId)) {
                 MovingData lastMovingData = playerLastLocation.get(playerId);
 
-                if(lastMovingData.getX() != x || lastMovingData.getY() != y || lastMovingData.getZ() != z || lastMovingData.getPitch() != pitch || lastMovingData.getYaw() != yaw) {
+                if(lastMovingData.getX() != x || lastMovingData.getY() != y || lastMovingData.getZ() != z || lastMovingData.getYaw() != yaw || lastMovingData.getPitch() != pitch) {
                     playerLastLocation.put(playerId, movingData);
                     VimeReplays.getRecordingManager().addRecordingData(movingData);
                 }
