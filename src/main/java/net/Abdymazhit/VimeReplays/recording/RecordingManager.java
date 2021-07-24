@@ -77,7 +77,19 @@ public class RecordingManager {
     private void addStartingPlayers() {
         List<RecordingData> tickRecords = new ArrayList<>();
         for(Player player : getRecordablePlayers()) {
-            tickRecords.add(new AddPlayerData(getPlayerId(player.getName())));
+            short playerId = getPlayerId(player.getName());
+
+            short x = Short.parseShort(String.format("%.2f", player.getLocation().getX()).replace(",", ""));
+            short y = Short.parseShort(String.format("%.2f", player.getLocation().getY()).replace(",", ""));
+            short z = Short.parseShort(String.format("%.2f", player.getLocation().getZ()).replace(",", ""));
+
+            double pitchRadian = Math.toRadians(player.getLocation().getPitch());
+            short pitch = (short) (pitchRadian * 160);
+
+            double yawRadian = Math.toRadians(player.getLocation().getYaw());
+            short yaw = (short) (yawRadian * 160);
+
+            tickRecords.add(new AddPlayerData(playerId, x, y, z, pitch, yaw));
         }
         VimeReplays.getRecordingManager().getReplay().records.put(0, tickRecords);
     }

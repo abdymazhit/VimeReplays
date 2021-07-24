@@ -19,6 +19,12 @@ public class ReplaySerializer extends Serializer<Replay> {
         output.writeByte(replay.gameType);
         output.writeByte(replay.mapName);
 
+        List<String> players = replay.players;
+        output.writeByte(players.size());
+        for(String playerName : players) {
+            output.writeString(playerName);
+        }
+
         Map<Integer, List<RecordingData>> records = replay.records;
 
         int recordsSize = records.size();
@@ -75,6 +81,11 @@ public class ReplaySerializer extends Serializer<Replay> {
                     AddPlayerData data = (AddPlayerData) tickRecord;
                     output.writeByte((byte) 7);
                     output.writeShort(data.getEntityId());
+                    output.writeShort(data.getX());
+                    output.writeShort(data.getY());
+                    output.writeShort(data.getZ());
+                    output.writeShort(data.getPitch());
+                    output.writeShort(data.getYaw());
                 } else if(tickRecord instanceof RemovePlayerData) {
                     RemovePlayerData data = (RemovePlayerData) tickRecord;
                     output.writeByte((byte) 8);
@@ -91,6 +102,14 @@ public class ReplaySerializer extends Serializer<Replay> {
         byte gameName = input.readByte();
         byte gameType = input.readByte();
         byte mapName = input.readByte();
+
+        List<String> players = new ArrayList<>();
+        byte playersSize = input.readByte();
+
+        for(int id = 0; id < playersSize; id++) {
+            String playerName = input.readString();
+            players.add(playerName);
+        }
 
         Map<Integer, List<RecordingData>> records = new HashMap<>();
 
@@ -144,8 +163,13 @@ public class ReplaySerializer extends Serializer<Replay> {
                     tickRecords.add(new ArmSwingData(entityId));
                 } else if (dataType == (byte) 7) {
                     short entityId = input.readShort();
+                    short x = input.readShort();
+                    short y = input.readShort();
+                    short z = input.readShort();
+                    short pitch = input.readShort();
+                    short yaw = input.readShort();
 
-                    tickRecords.add(new AddPlayerData(entityId));
+                    tickRecords.add(new AddPlayerData(entityId, x, y, z, pitch, yaw));
                 } else if (dataType == (byte) 8) {
                     short entityId = input.readShort();
 
@@ -157,6 +181,6 @@ public class ReplaySerializer extends Serializer<Replay> {
         }
         input.close();
 
-        return new Replay(gameName, gameType, mapName, null, records);
+        return new Replay(gameName, gameType, mapName, players, records);
     }
 }

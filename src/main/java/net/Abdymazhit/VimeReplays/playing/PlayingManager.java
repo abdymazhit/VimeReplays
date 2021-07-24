@@ -28,7 +28,7 @@ public class PlayingManager {
     private final PlayingTool playingTool;
     private final PlayingHandler playingHandler;
 
-    private BukkitTask actionBarTask;
+    private final BukkitTask actionBarTask;
 
     public PlayingManager(String gameName, String mapName) {
         replay = VimeReplays.getFileUtils().readFile();
@@ -83,11 +83,11 @@ public class PlayingManager {
                     PlayingStatus playingStatus = VimeReplays.getPlayingManager().getPlayingTool().getPlayingStatus();
 
                     if(playingStatus.equals(PlayingStatus.PLAY)) {
-                        message += "§aPLAYING";
+                        message += "§aВОСПРОИЗВЕДЕНИЕ";
                     } else if(playingStatus.equals(PlayingStatus.PAUSE)) {
-                        message += "§cPAUSED";
+                        message += "§cПАУЗА";
                     } else if(playingStatus.equals(PlayingStatus.FINISH)) {
-                        message += "§cFINISHED";
+                        message += "§bЗАВЕРШЕНО";
                     }
                     message += "         ";
                     message += "§e" + VimeReplays.getPlayingManager().getPlayingTool().getCurrentTick() + "/" + replay.records.size();

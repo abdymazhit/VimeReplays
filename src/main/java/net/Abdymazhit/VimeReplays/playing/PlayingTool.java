@@ -128,4 +128,8 @@ public class PlayingTool {
     public void setPlayer(Player player) {
         this.player = player;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
 }
