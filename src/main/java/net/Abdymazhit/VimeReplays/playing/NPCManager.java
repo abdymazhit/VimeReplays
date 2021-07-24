@@ -2,6 +2,7 @@ package net.Abdymazhit.VimeReplays.playing;
 
 import com.mojang.authlib.GameProfile;
 import net.Abdymazhit.VimeReplays.VimeReplays;
+import net.Abdymazhit.VimeReplays.customs.AnimationType;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -29,39 +30,57 @@ public class NPCManager {
         sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
         sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, npc));
 
+        setHeadRotation(npc, yaw, pitch);
+
         return npc;
     }
 
     public void teleport(EntityPlayer npc, double x, double y, double z, float yaw, float pitch) {
         PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport();
         setValue(packet, "a", npc.getId());
-        setValue(packet, "b", getFixLocation(x));
-        setValue(packet, "c", getFixLocation(y));
-        setValue(packet, "d", getFixLocation(z));
-        setValue(packet, "e", getFixRotation(yaw));
-        setValue(packet, "f", getFixRotation(pitch));
+        setValue(packet, "b", VimeReplays.getLocationUtils().getFixLocation(x));
+        setValue(packet, "c", VimeReplays.getLocationUtils().getFixLocation(y));
+        setValue(packet, "d", VimeReplays.getLocationUtils().getFixLocation(z));
+        setValue(packet, "e", VimeReplays.getLocationUtils().getFixRotation(yaw));
+        setValue(packet, "f", VimeReplays.getLocationUtils().getFixRotation(pitch));
 
         sendPacket(packet);
-        headRotation(npc, yaw, pitch);
+        setHeadRotation(npc, yaw, pitch);
     }
 
-    public void headRotation(EntityPlayer npc, float yaw, float pitch) {
-        PacketPlayOutEntity.PacketPlayOutEntityLook packet = new PacketPlayOutEntity.PacketPlayOutEntityLook(npc.getId(), getFixRotation(yaw), getFixRotation(pitch) , true);
+    public void setHeadRotation(EntityPlayer npc, float yaw, float pitch) {
+        PacketPlayOutEntity.PacketPlayOutEntityLook packet = new PacketPlayOutEntity.PacketPlayOutEntityLook(npc.getId(),
+                VimeReplays.getLocationUtils().getFixRotation(yaw), VimeReplays.getLocationUtils().getFixRotation(pitch) , true);
         PacketPlayOutEntityHeadRotation packetHead = new PacketPlayOutEntityHeadRotation();
         setValue(packetHead, "a", npc.getId());
-        setValue(packetHead, "b", getFixRotation(yaw));
-        setValue(packetHead, "c", getFixRotation(pitch));
+        setValue(packetHead, "b", VimeReplays.getLocationUtils().getFixRotation(yaw));
+        setValue(packetHead, "c", VimeReplays.getLocationUtils().getFixRotation(pitch));
 
         sendPacket(packet);
         sendPacket(packetHead);
     }
 
-    public void armSwing(EntityPlayer npc) {
+    public void setAnimation(EntityPlayer npc, AnimationType animationType) {
         PacketPlayOutAnimation packet = new PacketPlayOutAnimation();
-
         setValue(packet, "a", npc.getId());
-        setValue(packet, "b", 0);
 
+        if(animationType.equals(AnimationType.ARM_SWING)) {
+            setValue(packet, "b", 0);
+        } else if(animationType.equals(AnimationType.DAMAGE)) {
+            setValue(packet, "b", 1);
+        }
+
+        sendPacket(packet);
+    }
+
+    public void setSneaking(EntityPlayer npc, boolean isSneaking) {
+        DataWatcher dw = npc.getDataWatcher();
+        if(isSneaking) {
+            dw.watch(0, (byte) 0x02);
+        } else {
+            dw.watch(0, (byte) 0);
+        }
+        PacketPlayOutEntityMetadata packet = new PacketPlayOutEntityMetadata(npc.getId(), dw, true);
         sendPacket(packet);
     }
 
@@ -77,13 +96,5 @@ public class NPCManager {
 
     public void sendPacket(Packet<?> packet) {
         ((CraftPlayer) VimeReplays.getPlayingManager().getPlayingTool().getPlayer()).getHandle().playerConnection.sendPacket(packet);
-    }
-
-    public int getFixLocation(double d) {
-        return MathHelper.floor(d * 32.0D);
-    }
-
-    public byte getFixRotation(float f) {
-        return (byte) ((int) (f * 256.0F / 360.0F));
     }
 }

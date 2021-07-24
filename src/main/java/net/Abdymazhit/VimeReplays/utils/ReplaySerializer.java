@@ -39,7 +39,7 @@ public class ReplaySerializer extends Serializer<Replay> {
             for(RecordingData tickRecord : tickRecords) {
                 if(tickRecord instanceof MovingData) {
                     MovingData data = (MovingData) tickRecord;
-                    output.writeByte((byte) 0);
+                    output.writeByte( 0);
                     output.writeShort(data.getEntityId());
                     output.writeShort(data.getX());
                     output.writeShort(data.getY());
@@ -48,38 +48,38 @@ public class ReplaySerializer extends Serializer<Replay> {
                     output.writeShort(data.getPitch());
                 } else if(tickRecord instanceof SneakingData) {
                     SneakingData data = (SneakingData) tickRecord;
-                    output.writeByte((byte) 1);
+                    output.writeByte( 1);
                     output.writeShort(data.getEntityId());
                 } else if(tickRecord instanceof UnsneakingData) {
                     UnsneakingData data = (UnsneakingData) tickRecord;
-                    output.writeByte((byte) 2);
+                    output.writeByte( 2);
                     output.writeShort(data.getEntityId());
                 } else if(tickRecord instanceof ItemHeldData) {
                     ItemHeldData data = (ItemHeldData) tickRecord;
-                    output.writeByte((byte) 3);
+                    output.writeByte( 3);
                     output.writeShort(data.getEntityId());
                     output.writeByte(data.getItemId());
                 } else if(tickRecord instanceof BlockPlaceData) {
                     BlockPlaceData data = (BlockPlaceData) tickRecord;
-                    output.writeByte((byte) 4);
+                    output.writeByte( 4);
                     output.writeByte(data.getBlockId());
                     output.writeShort(data.getX());
                     output.writeShort(data.getY());
                     output.writeShort(data.getZ());
                 } else if(tickRecord instanceof BlockBreakData) {
                     BlockBreakData data = (BlockBreakData) tickRecord;
-                    output.writeByte((byte) 5);
+                    output.writeByte( 5);
                     output.writeByte(data.getBlockId());
                     output.writeShort(data.getX());
                     output.writeShort(data.getY());
                     output.writeShort(data.getZ());
                 } else if(tickRecord instanceof ArmSwingData) {
                     ArmSwingData data = (ArmSwingData) tickRecord;
-                    output.writeByte((byte) 6);
+                    output.writeByte( 6);
                     output.writeShort(data.getEntityId());
                 } else if(tickRecord instanceof AddPlayerData) {
                     AddPlayerData data = (AddPlayerData) tickRecord;
-                    output.writeByte((byte) 7);
+                    output.writeByte( 7);
                     output.writeShort(data.getEntityId());
                     output.writeShort(data.getX());
                     output.writeShort(data.getY());
@@ -88,7 +88,11 @@ public class ReplaySerializer extends Serializer<Replay> {
                     output.writeShort(data.getPitch());
                 } else if(tickRecord instanceof RemovePlayerData) {
                     RemovePlayerData data = (RemovePlayerData) tickRecord;
-                    output.writeByte((byte) 8);
+                    output.writeByte( 8);
+                    output.writeShort(data.getEntityId());
+                } else if(tickRecord instanceof DamageData) {
+                    DamageData data = (DamageData) tickRecord;
+                    output.writeByte( 9);
                     output.writeShort(data.getEntityId());
                 }
             }
@@ -121,7 +125,7 @@ public class ReplaySerializer extends Serializer<Replay> {
             List<RecordingData> tickRecords = new ArrayList<>();
             for(int i=0; i<tickRecordsSize; i++) {
                 byte dataType = input.readByte();
-                if (dataType == (byte) 0) {
+                if (dataType ==  0) {
                     short entityId = input.readShort();
                     short x = input.readShort();
                     short y = input.readShort();
@@ -130,38 +134,38 @@ public class ReplaySerializer extends Serializer<Replay> {
                     short pitch = input.readShort();
 
                     tickRecords.add(new MovingData(entityId, x, y, z, yaw, pitch));
-                } else if (dataType == (byte) 1) {
+                } else if (dataType ==  1) {
                     short entityId = input.readShort();
 
                     tickRecords.add(new SneakingData(entityId));
-                } else if (dataType == (byte) 2) {
+                } else if (dataType ==  2) {
                     short entityId = input.readShort();
 
                     tickRecords.add(new UnsneakingData(entityId));
-                } else if (dataType == (byte) 3) {
+                } else if (dataType ==  3) {
                     short entityId = input.readShort();
                     byte itemId = input.readByte();
 
                     tickRecords.add(new ItemHeldData(entityId, itemId));
-                } else if (dataType == (byte) 4) {
+                } else if (dataType ==  4) {
                     byte blockId = input.readByte();
                     short x = input.readByte();
                     short y = input.readByte();
                     short z = input.readByte();
 
                     tickRecords.add(new BlockPlaceData(blockId, x, y, z));
-                } else if (dataType == (byte) 5) {
+                } else if (dataType ==  5) {
                     byte blockId = input.readByte();
                     short x = input.readByte();
                     short y = input.readByte();
                     short z = input.readByte();
 
                     tickRecords.add(new BlockBreakData(blockId, x, y, z));
-                } else if (dataType == (byte) 6) {
+                } else if (dataType ==  6) {
                     short entityId = input.readShort();
 
                     tickRecords.add(new ArmSwingData(entityId));
-                } else if (dataType == (byte) 7) {
+                } else if (dataType ==  7) {
                     short entityId = input.readShort();
                     short x = input.readShort();
                     short y = input.readShort();
@@ -170,10 +174,14 @@ public class ReplaySerializer extends Serializer<Replay> {
                     short pitch = input.readShort();
 
                     tickRecords.add(new AddPlayerData(entityId, x, y, z, yaw, pitch));
-                } else if (dataType == (byte) 8) {
+                } else if (dataType ==  8) {
                     short entityId = input.readShort();
 
                     tickRecords.add(new RemovePlayerData(entityId));
+                } else if (dataType ==  9) {
+                    short entityId = input.readShort();
+
+                    tickRecords.add(new DamageData(entityId));
                 }
             }
 

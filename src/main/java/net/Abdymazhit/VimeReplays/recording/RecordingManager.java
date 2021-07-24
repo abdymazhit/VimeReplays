@@ -70,6 +70,7 @@ public class RecordingManager {
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new BlockPlaceDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new BlockBreakDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new ItemHeldDispatcher(), VimeReplays.getInstance());
+        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new DamageDispatcher(), VimeReplays.getInstance());
 
         return StatusCode.OK;
     }

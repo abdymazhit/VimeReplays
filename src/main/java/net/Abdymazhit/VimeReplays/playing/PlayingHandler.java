@@ -1,6 +1,7 @@
 package net.Abdymazhit.VimeReplays.playing;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
+import net.Abdymazhit.VimeReplays.customs.AnimationType;
 import net.Abdymazhit.VimeReplays.replay.data.*;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 
@@ -34,9 +35,13 @@ public class PlayingHandler {
             } else if(recordingData instanceof SneakingData) {
                 SneakingData data = (SneakingData) recordingData;
 
+                EntityPlayer npc = npcMap.get(data.getEntityId());
+                npcManager.setSneaking(npc, true);
             } else if(recordingData instanceof UnsneakingData) {
                 UnsneakingData data = (UnsneakingData) recordingData;
 
+                EntityPlayer npc = npcMap.get(data.getEntityId());
+                npcManager.setSneaking(npc, false);
             } else if(recordingData instanceof ItemHeldData) {
                 ItemHeldData data = (ItemHeldData) recordingData;
 
@@ -50,7 +55,7 @@ public class PlayingHandler {
                 ArmSwingData data = (ArmSwingData) recordingData;
 
                 EntityPlayer npc = npcMap.get(data.getEntityId());
-                npcManager.armSwing(npc);
+                npcManager.setAnimation(npc, AnimationType.ARM_SWING);
             } else if(recordingData instanceof AddPlayerData) {
                 AddPlayerData data = (AddPlayerData) recordingData;
                 if(!npcMap.containsKey(data.getEntityId())) {
@@ -76,6 +81,11 @@ public class PlayingHandler {
             } else if(recordingData instanceof RemovePlayerData) {
                 RemovePlayerData data = (RemovePlayerData) recordingData;
 
+            } else if(recordingData instanceof DamageData) {
+                DamageData data = (DamageData) recordingData;
+
+                EntityPlayer npc = npcMap.get(data.getEntityId());
+                npcManager.setAnimation(npc, AnimationType.DAMAGE);
             }
         }
     }
