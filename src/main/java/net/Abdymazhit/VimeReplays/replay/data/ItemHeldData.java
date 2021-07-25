@@ -7,9 +7,9 @@ public class ItemHeldData extends RecordingData implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final short entityId;
-    private final byte itemId;
+    private final short itemId;
 
-    public ItemHeldData(short entityId, byte itemId) {
+    public ItemHeldData(short entityId, short itemId) {
         this.entityId = entityId;
         this.itemId = itemId;
     }
@@ -18,7 +18,7 @@ public class ItemHeldData extends RecordingData implements Serializable {
         return entityId;
     }
 
-    public byte getItemId() {
+    public short getItemId() {
         return itemId;
     }
 }

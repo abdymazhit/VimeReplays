@@ -7,6 +7,7 @@ import com.esotericsoftware.kryo.unsafe.UnsafeInput;
 import com.esotericsoftware.kryo.unsafe.UnsafeOutput;
 import com.github.luben.zstd.Zstd;
 import net.Abdymazhit.VimeReplays.replay.Replay;
+import net.Abdymazhit.VimeReplays.replay.ReplaySerializer;
 import net.Abdymazhit.VimeReplays.replay.data.MovingData;
 import net.Abdymazhit.VimeReplays.replay.data.SneakingData;
 import net.Abdymazhit.VimeReplays.replay.data.UnsneakingData;
