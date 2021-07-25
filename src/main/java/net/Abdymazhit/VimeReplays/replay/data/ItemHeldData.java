@@ -1,5 +1,9 @@
 package net.Abdymazhit.VimeReplays.replay.data;
 
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import net.Abdymazhit.VimeReplays.VimeReplays;
+
 import java.io.Serializable;
 
 public class ItemHeldData extends RecordingData implements Serializable {
@@ -14,11 +18,22 @@ public class ItemHeldData extends RecordingData implements Serializable {
         this.itemId = itemId;
     }
 
+    public ItemHeldData(Input input) {
+        entityId = input.readShort();
+        itemId = input.readShort();
+    }
+
     public short getEntityId() {
         return entityId;
     }
 
     public short getItemId() {
         return itemId;
+    }
+
+    public void write(Output output) {
+        output.writeByte(VimeReplays.getSerializationUtils().getId(ItemHeldData.class));
+        output.writeShort(entityId);
+        output.writeShort(itemId);
     }
 }

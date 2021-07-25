@@ -3,6 +3,7 @@ package net.Abdymazhit.VimeReplays.recording;
 import net.Abdymazhit.VimeReplays.Config;
 import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.customs.StatusCode;
+import net.Abdymazhit.VimeReplays.recording.dispatchers.MainDispatcher;
 import net.Abdymazhit.VimeReplays.recording.dispatchers.events.*;
 import net.Abdymazhit.VimeReplays.recording.dispatchers.packets.PacketsListener;
 import net.Abdymazhit.VimeReplays.recording.dispatchers.ticks.MovingDispatcher;
@@ -27,6 +28,8 @@ public class RecordingManager {
 
     private List<Player> recordablePlayers;
     private Replay replay;
+
+    private MainDispatcher mainDispatcher;
 
     private PacketsListener packetsListener;
 
@@ -55,6 +58,8 @@ public class RecordingManager {
         if(players == null || players.isEmpty()) {
             return StatusCode.NoPlayersError;
         }
+
+        mainDispatcher = new MainDispatcher();
 
         packetsListener = new PacketsListener();
 
@@ -156,6 +161,10 @@ public class RecordingManager {
 
     public void removeRecordablePlayer(Player player) {
         recordablePlayers.remove(player);
+    }
+
+    public MainDispatcher getMainDispatcher() {
+        return mainDispatcher;
     }
 
     public Replay getReplay() {

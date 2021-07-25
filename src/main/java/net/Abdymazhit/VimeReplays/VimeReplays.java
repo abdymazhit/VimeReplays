@@ -3,10 +3,7 @@ package net.Abdymazhit.VimeReplays;
 import net.Abdymazhit.VimeReplays.customs.Mode;
 import net.Abdymazhit.VimeReplays.playing.PlayingManager;
 import net.Abdymazhit.VimeReplays.recording.RecordingManager;
-import net.Abdymazhit.VimeReplays.utils.EnchantmentUtils;
-import net.Abdymazhit.VimeReplays.utils.FileUtils;
-import net.Abdymazhit.VimeReplays.utils.ItemUtils;
-import net.Abdymazhit.VimeReplays.utils.LocationUtils;
+import net.Abdymazhit.VimeReplays.utils.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class VimeReplays extends JavaPlugin {
@@ -17,6 +14,7 @@ public class VimeReplays extends JavaPlugin {
     private static RecordingManager recordingManager;
 
     private static FileUtils fileUtils;
+    private static SerializationUtils serializationUtils;
     private static LocationUtils locationUtils;
     private static ItemUtils itemUtils;
     private static EnchantmentUtils enchantmentUtils;
@@ -27,6 +25,7 @@ public class VimeReplays extends JavaPlugin {
         Config.load();
 
         fileUtils = new FileUtils();
+        serializationUtils = new SerializationUtils();
         locationUtils = new LocationUtils();
         itemUtils = new ItemUtils();
         enchantmentUtils = new EnchantmentUtils();
@@ -52,6 +51,10 @@ public class VimeReplays extends JavaPlugin {
     public static PlayingManager getPlayingManager() { return playingManager; }
 
     public static FileUtils getFileUtils() { return fileUtils; }
+
+    public static SerializationUtils getSerializationUtils() {
+        return serializationUtils;
+    }
 
     public static LocationUtils getLocationUtils() { return locationUtils; }
 

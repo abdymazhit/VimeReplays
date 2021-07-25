@@ -5,12 +5,7 @@ import net.Abdymazhit.VimeReplays.replay.data.MovingData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class MovingDispatcher extends BukkitRunnable {
-
-    private Map<Short, MovingData> playerLastLocation;
 
     @Override
     public void run() {
@@ -25,21 +20,7 @@ public class MovingDispatcher extends BukkitRunnable {
 
             MovingData movingData = new MovingData(playerId, x, y, z, yaw, pitch);
 
-            if(playerLastLocation == null) {
-                playerLastLocation = new HashMap<>();
-            }
-
-            if(playerLastLocation.containsKey(playerId)) {
-                MovingData lastMovingData = playerLastLocation.get(playerId);
-
-                if(lastMovingData.getX() != x || lastMovingData.getY() != y || lastMovingData.getZ() != z || lastMovingData.getYaw() != yaw || lastMovingData.getPitch() != pitch) {
-                    playerLastLocation.put(playerId, movingData);
-                    VimeReplays.getRecordingManager().addRecordingData(movingData);
-                }
-            } else {
-                playerLastLocation.put(playerId, movingData);
-                VimeReplays.getRecordingManager().addRecordingData(movingData);
-            }
+            VimeReplays.getRecordingManager().getMainDispatcher().sendMovingData(movingData);
         }
     }
 }
