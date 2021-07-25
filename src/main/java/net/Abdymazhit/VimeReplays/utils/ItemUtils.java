@@ -1,8 +1,12 @@
 package net.Abdymazhit.VimeReplays.utils;
 
 import net.Abdymazhit.VimeReplays.customs.Item;
-import net.Abdymazhit.VimeReplays.customs.Potion;
+import net.Abdymazhit.VimeReplays.customs.PotionItem;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.Potion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +19,7 @@ public class ItemUtils {
         items = new HashMap<>();
 
         items.put(Material.AIR, new HashMap<Item, Integer>() {{
-            put(new Item(0), 0);
+            put(new Item(-1), 0);
         }});
 
         items.put(Material.STONE, new HashMap<Item, Integer>() {{
@@ -1339,77 +1343,77 @@ public class ItemUtils {
             put(new Item(1), 489);
             put(new Item(33), 490);
             put(new Item(65), 491);
-            put(new Potion(1, true), 492);
-            put(new Potion(33, true), 493);
-            put(new Potion(65, true), 494);
+            put(new PotionItem(1, true), 492);
+            put(new PotionItem(33, true), 493);
+            put(new PotionItem(65, true), 494);
 
             put(new Item(2), 495);
             put(new Item(34), 496);
             put(new Item(66), 497);
-            put(new Potion(2, true), 498);
-            put(new Potion(34, true), 499);
-            put(new Potion(66, true), 500);
+            put(new PotionItem(2, true), 498);
+            put(new PotionItem(34, true), 499);
+            put(new PotionItem(66, true), 500);
 
             put(new Item(35), 501);
             put(new Item(67), 502);
-            put(new Potion(35, true), 503);
-            put(new Potion(67, true), 504);
+            put(new PotionItem(35, true), 503);
+            put(new PotionItem(67, true), 504);
 
             put(new Item(4), 505);
             put(new Item(36), 506);
             put(new Item(68), 507);
-            put(new Potion(4, true), 508);
-            put(new Potion(36, true), 509);
-            put(new Potion(68, true), 510);
+            put(new PotionItem(4, true), 508);
+            put(new PotionItem(36, true), 509);
+            put(new PotionItem(68, true), 510);
 
             put(new Item(69), 511);
             put(new Item(37), 512);
-            put(new Potion(69, true), 513);
-            put(new Potion(37, true), 514);
+            put(new PotionItem(69, true), 513);
+            put(new PotionItem(37, true), 514);
 
             put(new Item(38), 515);
             put(new Item(70), 516);
-            put(new Potion(38, true), 517);
-            put(new Potion(70, true), 518);
+            put(new PotionItem(38, true), 517);
+            put(new PotionItem(70, true), 518);
 
             put(new Item(40), 519);
             put(new Item(72), 520);
-            put(new Potion(40, true), 521);
-            put(new Potion(72, true), 522);
+            put(new PotionItem(40, true), 521);
+            put(new PotionItem(72, true), 522);
 
             put(new Item(9), 523);
             put(new Item(41), 524);
             put(new Item(73), 525);
-            put(new Potion(9, true), 526);
-            put(new Potion(41, true), 527);
-            put(new Potion(73, true), 528);
+            put(new PotionItem(9, true), 526);
+            put(new PotionItem(41, true), 527);
+            put(new PotionItem(73, true), 528);
 
             put(new Item(42), 529);
             put(new Item(74), 530);
-            put(new Potion(42, true), 531);
-            put(new Potion(74, true), 532);
+            put(new PotionItem(42, true), 531);
+            put(new PotionItem(74, true), 532);
 
             put(new Item(11), 533);
             put(new Item(43), 534);
             put(new Item(75), 535);
-            put(new Potion(11, true), 536);
-            put(new Potion(43, true), 537);
-            put(new Potion(75, true), 538);
+            put(new PotionItem(11, true), 536);
+            put(new PotionItem(43, true), 537);
+            put(new PotionItem(75, true), 538);
 
             put(new Item(76), 539);
             put(new Item(44), 540);
-            put(new Potion(76, true), 541);
-            put(new Potion(44, true), 542);
+            put(new PotionItem(76, true), 541);
+            put(new PotionItem(44, true), 542);
 
             put(new Item(45), 543);
             put(new Item(77), 544);
-            put(new Potion(45, true), 545);
-            put(new Potion(77, true), 546);
+            put(new PotionItem(45, true), 545);
+            put(new PotionItem(77, true), 546);
 
             put(new Item(46), 547);
             put(new Item(78), 548);
-            put(new Potion(46, true), 549);
-            put(new Potion(78, true), 550);
+            put(new PotionItem(46, true), 549);
+            put(new PotionItem(78, true), 550);
         }});
 
         items.put(Material.GLASS_BOTTLE, new HashMap<Item, Integer>() {{
@@ -1722,26 +1726,59 @@ public class ItemUtils {
         }});
     }
 
-    public int getItemId(Material material, int data) {
-        Map<Item, Integer> value = items.get(material);
-        for(Item item : value.keySet()) {
-            if(item.getData() == data) {
-                return value.get(item);
+    public int getItemId(ItemStack itemStack) {
+        if(itemStack.getType() != Material.POTION) {
+            Map<Item, Integer> value = items.get(itemStack.getType());
+            for(Item item : value.keySet()) {
+                if(item.getData() == itemStack.getData().getData()) {
+                    return value.get(item);
+                }
+            }
+        } else {
+            Potion potion = Potion.fromItemStack(itemStack);
+
+            if(potion.isSplash()) {
+                Map<Item, Integer> value = items.get(itemStack.getType());
+                for(Item item : value.keySet()) {
+                    if(item instanceof PotionItem) {
+                        PotionItem potionItem = (PotionItem) item;
+                        if(potionItem.getData() == itemStack.getData().getData()) {
+                            return value.get(item);
+                        }
+                    }
+                }
+            } else {
+                Map<Item, Integer> value = items.get(itemStack.getType());
+                for(Item item : value.keySet()) {
+                    if(item.getData() == itemStack.getData().getData()) {
+                        return value.get(item);
+                    }
+                }
             }
         }
         return -1;
     }
 
-    public int getPotionItemId(Material material, int data) {
-        Map<Item, Integer> value = items.get(material);
-        for(Item item : value.keySet()) {
-            if(item instanceof Potion) {
-                Potion potion = (Potion) item;
-                if(potion.getData() == data) {
-                    return value.get(item);
+    public net.minecraft.server.v1_8_R3.ItemStack getItemStack(int itemId, Map<Enchantment, Integer> enchantments) {
+        net.minecraft.server.v1_8_R3.ItemStack itemStack = null;
+
+        for(Material material : items.keySet()) {
+            Map<Item, Integer> values = items.get(material);
+
+            for(Item value : values.keySet()) {
+                int data = value.getData();
+                int id = values.get(value);
+
+                if(id == itemId) {
+                    ItemStack item = new ItemStack(material, 1, (byte) data);
+                    if(enchantments != null) {
+                        item.addEnchantments(enchantments);
+                    }
+
+                    itemStack = CraftItemStack.asNMSCopy(item);
                 }
             }
         }
-        return -1;
+        return itemStack;
     }
 }

@@ -3,7 +3,6 @@ package net.Abdymazhit.VimeReplays.recording.dispatchers.events;
 import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.replay.data.EnchantedItemHeldData;
 import net.Abdymazhit.VimeReplays.replay.data.ItemHeldData;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +14,7 @@ import java.util.Map;
 
 public class ItemHeldDispatcher implements Listener {
 
-    private final Map<Short, ItemHeldData> lastPlayerItemId;
+    private final Map<Short, Short> lastPlayerItemId;
 
     public ItemHeldDispatcher() {
         lastPlayerItemId = new HashMap<>();
@@ -26,16 +25,10 @@ public class ItemHeldDispatcher implements Listener {
         Player player = event.getPlayer();
 
         if(VimeReplays.getRecordingManager().getRecordablePlayers().contains(player)) {
-            ItemStack item = player.getItemInHand();
+            ItemStack item = player.getInventory().getItem(event.getNewSlot());
 
             short playerId = VimeReplays.getRecordingManager().getPlayerId(player.getName());
-            short itemId;
-
-            if(item.getType() == Material.POTION) {
-                itemId = (short) VimeReplays.getItemUtils().getPotionItemId(item.getType(), item.getData().getData());
-            } else {
-                itemId = (short) VimeReplays.getItemUtils().getItemId(item.getType(), item.getData().getData());
-            }
+            short itemId = (short) VimeReplays.getItemUtils().getItemId(item);
 
             ItemHeldData itemHeldData;
 
@@ -46,14 +39,14 @@ public class ItemHeldDispatcher implements Listener {
             }
 
             if(lastPlayerItemId.containsKey(playerId)) {
-                ItemHeldData lastItemHeldData = lastPlayerItemId.get(playerId);
+                short lastItemId = lastPlayerItemId.get(playerId);
 
-                if(lastItemHeldData.getItemId() != itemId) {
-                    lastPlayerItemId.put(playerId, itemHeldData);
+                if(lastItemId != itemId) {
+                    lastPlayerItemId.put(playerId, itemHeldData.getItemId());
                     VimeReplays.getRecordingManager().addRecordingData(itemHeldData);
                 }
             } else {
-                lastPlayerItemId.put(playerId, itemHeldData);
+                lastPlayerItemId.put(playerId, itemHeldData.getItemId());
                 VimeReplays.getRecordingManager().addRecordingData(itemHeldData);
             }
         }

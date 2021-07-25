@@ -4,6 +4,7 @@ import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.customs.AnimationType;
 import net.Abdymazhit.VimeReplays.replay.data.*;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,9 +43,6 @@ public class PlayingHandler {
 
                 EntityPlayer npc = npcMap.get(data.getEntityId());
                 npcManager.setSneaking(npc, false);
-            } else if(recordingData instanceof ItemHeldData) {
-                ItemHeldData data = (ItemHeldData) recordingData;
-
             } else if(recordingData instanceof BlockPlaceData) {
                 BlockPlaceData data = (BlockPlaceData) recordingData;
 
@@ -86,6 +84,20 @@ public class PlayingHandler {
 
                 EntityPlayer npc = npcMap.get(data.getEntityId());
                 npcManager.setAnimation(npc, AnimationType.DAMAGE);
+            } else if(recordingData instanceof EnchantedItemHeldData) {
+                EnchantedItemHeldData data = (EnchantedItemHeldData) recordingData;
+
+                EntityPlayer npc = npcMap.get(data.getEntityId());
+                ItemStack itemStack = VimeReplays.getItemUtils().getItemStack(data.getItemId(), data.getEnchantments());
+
+                npcManager.setItemInHand(npc, itemStack);
+            } else if(recordingData instanceof ItemHeldData) {
+                ItemHeldData data = (ItemHeldData) recordingData;
+
+                EntityPlayer npc = npcMap.get(data.getEntityId());
+                ItemStack itemStack = VimeReplays.getItemUtils().getItemStack(data.getItemId(), null);
+
+                npcManager.setItemInHand(npc, itemStack);
             }
         }
     }

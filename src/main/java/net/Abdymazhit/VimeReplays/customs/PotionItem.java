@@ -1,10 +1,10 @@
 package net.Abdymazhit.VimeReplays.customs;
 
-public class Potion extends Item {
+public class PotionItem extends Item {
 
     private final boolean isSplash;
 
-    public Potion(int data, boolean isSplash) {
+    public PotionItem(int data, boolean isSplash) {
         super(data);
         this.isSplash = isSplash;
     }

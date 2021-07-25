@@ -84,6 +84,15 @@ public class NPCManager {
         sendPacket(packet);
     }
 
+    public void setItemInHand(EntityPlayer npc, ItemStack itemStack) {
+        PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment();
+        setValue(packet, "a", npc.getId());
+        setValue(packet, "b", 0);
+        setValue(packet, "c", itemStack);
+
+        sendPacket(packet);
+    }
+
     public void setValue(Object obj,String name,Object value) {
         try{
             Field field = obj.getClass().getDeclaredField(name);

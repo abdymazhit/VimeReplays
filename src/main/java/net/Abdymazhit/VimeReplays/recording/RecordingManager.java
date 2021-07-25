@@ -8,9 +8,12 @@ import net.Abdymazhit.VimeReplays.recording.dispatchers.packets.PacketsListener;
 import net.Abdymazhit.VimeReplays.recording.dispatchers.ticks.MovingDispatcher;
 import net.Abdymazhit.VimeReplays.replay.Replay;
 import net.Abdymazhit.VimeReplays.replay.data.AddPlayerData;
+import net.Abdymazhit.VimeReplays.replay.data.EnchantedItemHeldData;
+import net.Abdymazhit.VimeReplays.replay.data.ItemHeldData;
 import net.Abdymazhit.VimeReplays.replay.data.RecordingData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -29,6 +32,8 @@ public class RecordingManager {
 
     private BukkitTask ticksDispatcherTask;
     private BukkitTask movingDispatcherTask;
+
+    private ItemHeldDispatcher itemHeldDispatcher;
 
     public StatusCode startRecording(String gameName, String gameType, String mapName, List<Player> players) {
         byte gameNameId = Config.getGameNameIdByString(gameName);
@@ -61,7 +66,7 @@ public class RecordingManager {
 
         replay = new Replay(gameNameId, gameTypeId, mapNameId, playersId, new HashMap<>());
 
-        addStartingPlayers();
+        addFirstTickData();
         ticksDispatcherTask = startRecordingTicksTask();
         movingDispatcherTask = new MovingDispatcher().runTaskTimer(VimeReplays.getInstance(), 0L, 1L);
 
@@ -69,13 +74,13 @@ public class RecordingManager {
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new ArmSwingDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new BlockPlaceDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new BlockBreakDispatcher(), VimeReplays.getInstance());
-        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new ItemHeldDispatcher(), VimeReplays.getInstance());
+        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(itemHeldDispatcher = new ItemHeldDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new DamageDispatcher(), VimeReplays.getInstance());
 
         return StatusCode.OK;
     }
 
-    private void addStartingPlayers() {
+    private void addFirstTickData() {
         List<RecordingData> tickRecords = new ArrayList<>();
         for(Player player : getRecordablePlayers()) {
             short playerId = getPlayerId(player.getName());
@@ -87,6 +92,22 @@ public class RecordingManager {
             short pitch = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getPitch());
 
             tickRecords.add(new AddPlayerData(playerId, x, y, z, yaw, pitch));
+
+            if(player.getItemInHand() != null) {
+                ItemStack item = player.getItemInHand();
+
+                short itemId = (short) VimeReplays.getItemUtils().getItemId(item);
+
+                ItemHeldData itemHeldData;
+
+                if(!item.getEnchantments().isEmpty()) {
+                    itemHeldData = new EnchantedItemHeldData(playerId, itemId, item.getEnchantments());
+                } else {
+                    itemHeldData = new ItemHeldData(playerId, itemId);
+                }
+
+                tickRecords.add(itemHeldData);
+            }
         }
         VimeReplays.getRecordingManager().getReplay().records.put(0, tickRecords);
     }
