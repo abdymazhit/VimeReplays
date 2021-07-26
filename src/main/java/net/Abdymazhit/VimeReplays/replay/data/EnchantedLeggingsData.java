@@ -3,24 +3,27 @@ package net.Abdymazhit.VimeReplays.replay.data;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import net.Abdymazhit.VimeReplays.VimeReplays;
+import net.Abdymazhit.VimeReplays.customs.EquipmentType;
+import net.Abdymazhit.VimeReplays.playing.NPC;
+import net.minecraft.server.v1_8_R3.ItemStack;
 import org.bukkit.enchantments.Enchantment;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnchantedEquipmentData extends EquipmentData implements Serializable {
+public class EnchantedLeggingsData extends LeggingsData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final Map<Enchantment, Integer> enchantments;
 
-    public EnchantedEquipmentData(short entityId, short itemId, Map<Enchantment, Integer> enchantments) {
+    public EnchantedLeggingsData(short entityId, short itemId, Map<Enchantment, Integer> enchantments) {
         super(entityId, itemId);
         this.enchantments = enchantments;
     }
 
-    public EnchantedEquipmentData(Input input) {
+    public EnchantedLeggingsData(Input input) {
         super(input.readShort(), input.readShort());
         int enchantmentsSize = input.readByte();
 
@@ -38,7 +41,7 @@ public class EnchantedEquipmentData extends EquipmentData implements Serializabl
     }
 
     public void write(Output output) {
-        output.writeByte(VimeReplays.getSerializationUtils().getId(EnchantedEquipmentData.class));
+        output.writeByte(VimeReplays.getSerializationUtils().getId(EnchantedLeggingsData.class));
         output.writeShort(getEntityId());
         output.writeShort(getItemId());
         output.writeByte(enchantments.size());
@@ -50,5 +53,11 @@ public class EnchantedEquipmentData extends EquipmentData implements Serializabl
             output.writeByte(enchantmentId);
             output.writeByte(level);
         }
+    }
+
+    public void performAction() {
+        NPC npc = VimeReplays.getPlayingManager().getPlayingHandler().getNPCList().get(getEntityId());
+        ItemStack itemStack = VimeReplays.getItemUtils().getItemStack(getItemId(), getEnchantments());
+        npc.setEquipment(EquipmentType.LEGGINGS, itemStack);
     }
 }

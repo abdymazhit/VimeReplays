@@ -25,8 +25,14 @@ public class SerializationUtils {
         dataTypeId.put(BlockPlaceData.class, 9);
         dataTypeId.put(EnchantedItemHeldData.class, 10);
         dataTypeId.put(ItemHeldData.class, 11);
-        dataTypeId.put(EnchantedEquipmentData.class, 12);
-        dataTypeId.put(EquipmentData.class, 13);
+        dataTypeId.put(EnchantedHelmetData.class, 12);
+        dataTypeId.put(HelmetData.class, 13);
+        dataTypeId.put(EnchantedChestplateData.class, 14);
+        dataTypeId.put(ChestplateData.class, 15);
+        dataTypeId.put(EnchantedLeggingsData.class, 16);
+        dataTypeId.put(LeggingsData.class, 17);
+        dataTypeId.put(EnchantedBootsData.class, 18);
+        dataTypeId.put(BootsData.class, 19);
     }
 
     public void writeData(RecordingData recordingData, Output output) {
@@ -63,11 +69,29 @@ public class SerializationUtils {
         } else if(recordingData instanceof ItemHeldData) {
             ItemHeldData data = (ItemHeldData) recordingData;
             data.write(output);
-        } else if(recordingData instanceof EnchantedEquipmentData) {
-            EnchantedEquipmentData data = (EnchantedEquipmentData) recordingData;
+        } else if(recordingData instanceof EnchantedHelmetData) {
+            EnchantedHelmetData data = (EnchantedHelmetData) recordingData;
             data.write(output);
-        } else if(recordingData instanceof EquipmentData) {
-            EquipmentData data = (EquipmentData) recordingData;
+        } else if(recordingData instanceof HelmetData) {
+            HelmetData data = (HelmetData) recordingData;
+            data.write(output);
+        } else if(recordingData instanceof EnchantedChestplateData) {
+            EnchantedChestplateData data = (EnchantedChestplateData) recordingData;
+            data.write(output);
+        } else if(recordingData instanceof ChestplateData) {
+            ChestplateData data = (ChestplateData) recordingData;
+            data.write(output);
+        } else if(recordingData instanceof EnchantedLeggingsData) {
+            EnchantedLeggingsData data = (EnchantedLeggingsData) recordingData;
+            data.write(output);
+        } else if(recordingData instanceof LeggingsData) {
+            LeggingsData data = (LeggingsData) recordingData;
+            data.write(output);
+        } else if(recordingData instanceof EnchantedBootsData) {
+            EnchantedBootsData data = (EnchantedBootsData) recordingData;
+            data.write(output);
+        } else if(recordingData instanceof BootsData) {
+            BootsData data = (BootsData) recordingData;
             data.write(output);
         }
     }
@@ -97,10 +121,22 @@ public class SerializationUtils {
             return new EnchantedItemHeldData(input);
         } else if(data == ItemHeldData.class) {
             return new ItemHeldData(input);
-        } else if(data == EnchantedEquipmentData.class) {
-            return new EnchantedEquipmentData(input);
-        } else if(data == EquipmentData.class) {
-            return new EquipmentData(input);
+        } else if(data == EnchantedHelmetData.class) {
+            return new EnchantedHelmetData(input);
+        } else if(data == HelmetData.class) {
+            return new HelmetData(input);
+        } else if(data == EnchantedChestplateData.class) {
+            return new EnchantedChestplateData(input);
+        } else if(data == ChestplateData.class) {
+            return new ChestplateData(input);
+        } else if(data == EnchantedLeggingsData.class) {
+            return new EnchantedLeggingsData(input);
+        } else if(data == LeggingsData.class) {
+            return new LeggingsData(input);
+        } else if(data == EnchantedBootsData.class) {
+            return new EnchantedBootsData(input);
+        } else if(data == BootsData.class) {
+            return new BootsData(input);
         }
 
         return null;

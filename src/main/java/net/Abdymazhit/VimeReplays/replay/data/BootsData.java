@@ -3,22 +3,25 @@ package net.Abdymazhit.VimeReplays.replay.data;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import net.Abdymazhit.VimeReplays.VimeReplays;
+import net.Abdymazhit.VimeReplays.customs.EquipmentType;
+import net.Abdymazhit.VimeReplays.playing.NPC;
+import net.minecraft.server.v1_8_R3.ItemStack;
 
 import java.io.Serializable;
 
-public class EquipmentData extends RecordingData implements Serializable {
+public class BootsData extends RecordingData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final short entityId;
     private final short itemId;
 
-    public EquipmentData(short entityId, short itemId) {
+    public BootsData(short entityId, short itemId) {
         this.entityId = entityId;
         this.itemId = itemId;
     }
 
-    public EquipmentData(Input input) {
+    public BootsData(Input input) {
         entityId = input.readShort();
         itemId = input.readShort();
     }
@@ -32,8 +35,14 @@ public class EquipmentData extends RecordingData implements Serializable {
     }
 
     public void write(Output output) {
-        output.writeByte(VimeReplays.getSerializationUtils().getId(EquipmentData.class));
+        output.writeByte(VimeReplays.getSerializationUtils().getId(BootsData.class));
         output.writeShort(entityId);
         output.writeShort(itemId);
+    }
+
+    public void performAction() {
+        NPC npc = VimeReplays.getPlayingManager().getPlayingHandler().getNPCList().get(entityId);
+        ItemStack itemStack = VimeReplays.getItemUtils().getItemStack(itemId, null);
+        npc.setEquipment(EquipmentType.BOOTS, itemStack);
     }
 }

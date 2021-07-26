@@ -1770,12 +1770,14 @@ public class ItemUtils {
                 int id = values.get(value);
 
                 if(id == itemId) {
-                    ItemStack item = new ItemStack(material, 1, (byte) data);
-                    if(enchantments != null) {
-                        item.addEnchantments(enchantments);
-                    }
+                    if(!material.equals(Material.AIR)) {
+                        ItemStack item = new ItemStack(material, 1, (byte) data);
+                        if(enchantments != null) {
+                            item.addEnchantments(enchantments);
+                        }
 
-                    itemStack = CraftItemStack.asNMSCopy(item);
+                        itemStack = CraftItemStack.asNMSCopy(item);
+                    }
                 }
             }
         }

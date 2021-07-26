@@ -80,6 +80,7 @@ public class RecordingManager {
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new BlockBreakDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new ItemHeldDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new DamageDispatcher(), VimeReplays.getInstance());
+        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new EquipmentDispatcher(), VimeReplays.getInstance());
 
         return StatusCode.OK;
     }
@@ -103,6 +104,34 @@ public class RecordingManager {
                 VimeReplays.getRecordingManager().getMainDispatcher().sendItemHeldData(player, itemInHand);
             } else {
                 VimeReplays.getRecordingManager().getMainDispatcher().sendItemHeldData(player, new ItemStack(Material.AIR));
+            }
+
+            ItemStack helmet = player.getInventory().getHelmet();
+            if(helmet != null) {
+                VimeReplays.getRecordingManager().getMainDispatcher().sendHelmetData(player, helmet);
+            } else {
+                VimeReplays.getRecordingManager().getMainDispatcher().sendHelmetData(player, new ItemStack(Material.AIR));
+            }
+
+            ItemStack chestplate = player.getInventory().getChestplate();
+            if(chestplate != null) {
+                VimeReplays.getRecordingManager().getMainDispatcher().sendChestplateData(player, chestplate);
+            } else {
+                VimeReplays.getRecordingManager().getMainDispatcher().sendChestplateData(player, new ItemStack(Material.AIR));
+            }
+
+            ItemStack leggings = player.getInventory().getLeggings();
+            if(leggings != null) {
+                VimeReplays.getRecordingManager().getMainDispatcher().sendLeggingsData(player, leggings);
+            } else {
+                VimeReplays.getRecordingManager().getMainDispatcher().sendLeggingsData(player, new ItemStack(Material.AIR));
+            }
+
+            ItemStack boots = player.getInventory().getBoots();
+            if(boots != null) {
+                VimeReplays.getRecordingManager().getMainDispatcher().sendBootsData(player, boots);
+            } else {
+                VimeReplays.getRecordingManager().getMainDispatcher().sendBootsData(player, new ItemStack(Material.AIR));
             }
         }
     }

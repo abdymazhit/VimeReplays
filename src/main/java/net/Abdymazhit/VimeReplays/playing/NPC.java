@@ -3,6 +3,7 @@ package net.Abdymazhit.VimeReplays.playing;
 import com.mojang.authlib.GameProfile;
 import net.Abdymazhit.VimeReplays.VimeReplays;
 import net.Abdymazhit.VimeReplays.customs.AnimationType;
+import net.Abdymazhit.VimeReplays.customs.EquipmentType;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -13,14 +14,16 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.util.UUID;
 
-public class NPCManager {
+public class NPC {
 
-    public EntityPlayer create(String playerName, double x, double y, double z, float yaw, float pitch) {
+    private final EntityPlayer npc;
+
+    public NPC(String playerName, double x, double y, double z, float yaw, float pitch) {
         MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
         WorldServer nmsWorld = ((CraftWorld) Bukkit.getWorld("replayMap")).getHandle();
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), playerName);
 
-        EntityPlayer npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
+        npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
         Player npcPlayer = npc.getBukkitEntity().getPlayer();
         npcPlayer.setPlayerListName("");
 
@@ -30,12 +33,10 @@ public class NPCManager {
         sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
         sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, npc));
 
-        setHeadRotation(npc, yaw, pitch);
-
-        return npc;
+        setHeadRotation(yaw, pitch);
     }
 
-    public void teleport(EntityPlayer npc, double x, double y, double z, float yaw, float pitch) {
+    public void teleport(double x, double y, double z, float yaw, float pitch) {
         PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport();
         setValue(packet, "a", npc.getId());
         setValue(packet, "b", VimeReplays.getLocationUtils().getFixLocation(x));
@@ -45,10 +46,10 @@ public class NPCManager {
         setValue(packet, "f", VimeReplays.getLocationUtils().getFixRotation(pitch));
 
         sendPacket(packet);
-        setHeadRotation(npc, yaw, pitch);
+        setHeadRotation(yaw, pitch);
     }
 
-    public void setHeadRotation(EntityPlayer npc, float yaw, float pitch) {
+    public void setHeadRotation(float yaw, float pitch) {
         PacketPlayOutEntity.PacketPlayOutEntityLook packet = new PacketPlayOutEntity.PacketPlayOutEntityLook(npc.getId(),
                 VimeReplays.getLocationUtils().getFixRotation(yaw), VimeReplays.getLocationUtils().getFixRotation(pitch) , true);
         PacketPlayOutEntityHeadRotation packetHead = new PacketPlayOutEntityHeadRotation();
@@ -60,7 +61,7 @@ public class NPCManager {
         sendPacket(packetHead);
     }
 
-    public void setAnimation(EntityPlayer npc, AnimationType animationType) {
+    public void setAnimation(AnimationType animationType) {
         PacketPlayOutAnimation packet = new PacketPlayOutAnimation();
         setValue(packet, "a", npc.getId());
 
@@ -73,7 +74,7 @@ public class NPCManager {
         sendPacket(packet);
     }
 
-    public void setSneaking(EntityPlayer npc, boolean isSneaking) {
+    public void setSneaking(boolean isSneaking) {
         DataWatcher dw = npc.getDataWatcher();
         if(isSneaking) {
             dw.watch(0, (byte) 0x02);
@@ -84,12 +85,21 @@ public class NPCManager {
         sendPacket(packet);
     }
 
-    public void setItemInHand(EntityPlayer npc, ItemStack itemStack) {
+    public void setEquipment(EquipmentType equipmentType, ItemStack itemStack) {
         PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment();
         setValue(packet, "a", npc.getId());
-        setValue(packet, "b", 0);
+        if(equipmentType.equals(EquipmentType.HAND)) {
+            setValue(packet, "b", 0);
+        } else if(equipmentType.equals(EquipmentType.HELMET)) {
+            setValue(packet, "b", 4);
+        } else if(equipmentType.equals(EquipmentType.CHESTPLATE)) {
+            setValue(packet, "b", 3);
+        } else if(equipmentType.equals(EquipmentType.LEGGINGS)) {
+            setValue(packet, "b", 2);
+        } else if(equipmentType.equals(EquipmentType.BOOTS)) {
+            setValue(packet, "b", 1);
+        }
         setValue(packet, "c", itemStack);
-
         sendPacket(packet);
     }
 

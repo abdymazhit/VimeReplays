@@ -1,10 +1,7 @@
 package net.Abdymazhit.VimeReplays.playing;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
-import net.Abdymazhit.VimeReplays.customs.AnimationType;
 import net.Abdymazhit.VimeReplays.replay.data.*;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,97 +9,80 @@ import java.util.Map;
 
 public class PlayingHandler {
 
-    private final NPCManager npcManager;
-    private final Map<Short, EntityPlayer> npcMap;
+    private final Map<Short, NPC> npcList;
 
     public PlayingHandler() {
-        npcManager = new NPCManager();
-        npcMap = new HashMap<>();
+        npcList = new HashMap<>();
     }
 
     public void performAction(List<RecordingData> tickRecords) {
         for(RecordingData recordingData : tickRecords) {
-            if(recordingData instanceof MovingData) {
-                MovingData data = (MovingData) recordingData;
-
-                EntityPlayer npc = npcMap.get(data.getEntityId());
-                double x = VimeReplays.getLocationUtils().getLocationDouble(data.getX());
-                double y = VimeReplays.getLocationUtils().getLocationDouble(data.getY());
-                double z = VimeReplays.getLocationUtils().getLocationDouble(data.getZ());
-                float yaw = VimeReplays.getLocationUtils().getLocationFloat(data.getYaw());
-                float pitch = VimeReplays.getLocationUtils().getLocationFloat(data.getPitch());
-
-                npcManager.teleport(npc, x, y, z, yaw, pitch);
-            } else if(recordingData instanceof SneakingData) {
-                SneakingData data = (SneakingData) recordingData;
-
-                EntityPlayer npc = npcMap.get(data.getEntityId());
-                npcManager.setSneaking(npc, true);
-            } else if(recordingData instanceof UnsneakingData) {
-                UnsneakingData data = (UnsneakingData) recordingData;
-
-                EntityPlayer npc = npcMap.get(data.getEntityId());
-                npcManager.setSneaking(npc, false);
-            } else if(recordingData instanceof BlockPlaceData) {
-                BlockPlaceData data = (BlockPlaceData) recordingData;
-
-            } else if(recordingData instanceof BlockBreakData) {
-                BlockBreakData data = (BlockBreakData) recordingData;
-
-            } else if(recordingData instanceof ArmSwingData) {
-                ArmSwingData data = (ArmSwingData) recordingData;
-
-                EntityPlayer npc = npcMap.get(data.getEntityId());
-                npcManager.setAnimation(npc, AnimationType.ARM_SWING);
-            } else if(recordingData instanceof AddPlayerData) {
+            if(recordingData instanceof AddPlayerData) {
                 AddPlayerData data = (AddPlayerData) recordingData;
-                if(!npcMap.containsKey(data.getEntityId())) {
-                    double x = VimeReplays.getLocationUtils().getLocationDouble(data.getX());
-                    double y = VimeReplays.getLocationUtils().getLocationDouble(data.getY());
-                    double z = VimeReplays.getLocationUtils().getLocationDouble(data.getZ());
-                    float yaw = VimeReplays.getLocationUtils().getLocationFloat(data.getYaw());
-                    float pitch = VimeReplays.getLocationUtils().getLocationFloat(data.getPitch());
-
-                    EntityPlayer entityPlayer = npcManager.create(getPlayerName(data.getEntityId()), x, y, z, yaw, pitch);
-
-                    npcMap.put(data.getEntityId(), entityPlayer);
-                } else {
-                    EntityPlayer npc = npcMap.get(data.getEntityId());
-                    double x = VimeReplays.getLocationUtils().getLocationDouble(data.getX());
-                    double y = VimeReplays.getLocationUtils().getLocationDouble(data.getY());
-                    double z = VimeReplays.getLocationUtils().getLocationDouble(data.getZ());
-                    float yaw = VimeReplays.getLocationUtils().getLocationFloat(data.getYaw());
-                    float pitch = VimeReplays.getLocationUtils().getLocationFloat(data.getPitch());
-
-                    npcManager.teleport(npc, x, y, z, yaw, pitch);
-                }
+                data.performAction();
             } else if(recordingData instanceof RemovePlayerData) {
                 RemovePlayerData data = (RemovePlayerData) recordingData;
-
+//                data.performAction();
+            } else if(recordingData instanceof MovingData) {
+                MovingData data = (MovingData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof ArmSwingData) {
+                ArmSwingData data = (ArmSwingData) recordingData;
+                data.performAction();
             } else if(recordingData instanceof DamageData) {
                 DamageData data = (DamageData) recordingData;
-
-                EntityPlayer npc = npcMap.get(data.getEntityId());
-                npcManager.setAnimation(npc, AnimationType.DAMAGE);
+                data.performAction();
+            } else if(recordingData instanceof SneakingData) {
+                SneakingData data = (SneakingData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof UnsneakingData) {
+                UnsneakingData data = (UnsneakingData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof BlockBreakData) {
+                BlockBreakData data = (BlockBreakData) recordingData;
+//                data.performAction();
+            } else if(recordingData instanceof BlockPlaceData) {
+                BlockPlaceData data = (BlockPlaceData) recordingData;
+//                data.performAction();
             } else if(recordingData instanceof EnchantedItemHeldData) {
                 EnchantedItemHeldData data = (EnchantedItemHeldData) recordingData;
-
-                EntityPlayer npc = npcMap.get(data.getEntityId());
-                ItemStack itemStack = VimeReplays.getItemUtils().getItemStack(data.getItemId(), data.getEnchantments());
-
-                npcManager.setItemInHand(npc, itemStack);
+                data.performAction();
             } else if(recordingData instanceof ItemHeldData) {
                 ItemHeldData data = (ItemHeldData) recordingData;
-
-                EntityPlayer npc = npcMap.get(data.getEntityId());
-                ItemStack itemStack = VimeReplays.getItemUtils().getItemStack(data.getItemId(), null);
-
-                npcManager.setItemInHand(npc, itemStack);
+                data.performAction();
+            } else if(recordingData instanceof EnchantedHelmetData) {
+                EnchantedHelmetData data = (EnchantedHelmetData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof HelmetData) {
+                HelmetData data = (HelmetData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof EnchantedChestplateData) {
+                EnchantedChestplateData data = (EnchantedChestplateData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof ChestplateData) {
+                ChestplateData data = (ChestplateData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof EnchantedLeggingsData) {
+                EnchantedLeggingsData data = (EnchantedLeggingsData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof LeggingsData) {
+                LeggingsData data = (LeggingsData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof EnchantedBootsData) {
+                EnchantedBootsData data = (EnchantedBootsData) recordingData;
+                data.performAction();
+            } else if(recordingData instanceof BootsData) {
+                BootsData data = (BootsData) recordingData;
+                data.performAction();
             }
         }
     }
 
-    private String getPlayerName(int id) {
+    public String getPlayerName(int id) {
         return VimeReplays.getPlayingManager().getReplay().players.get(id);
+    }
+
+    public Map<Short, NPC> getNPCList() {
+        return npcList;
     }
 }

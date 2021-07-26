@@ -12,20 +12,20 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnchantedItemHeldData extends ItemHeldData implements Serializable {
+public class EnchantedHelmetData extends HelmetData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final Map<Enchantment, Integer> enchantments;
 
-    public EnchantedItemHeldData(short entityId, short itemId, Map<Enchantment, Integer> enchantments) {
+    public EnchantedHelmetData(short entityId, short itemId, Map<Enchantment, Integer> enchantments) {
         super(entityId, itemId);
         this.enchantments = enchantments;
     }
 
-    public EnchantedItemHeldData(Input input) {
+    public EnchantedHelmetData(Input input) {
         super(input.readShort(), input.readShort());
-        byte enchantmentsSize = input.readByte();
+        int enchantmentsSize = input.readByte();
 
         enchantments = new HashMap<>();
         for(byte id = 0; id < enchantmentsSize; id++) {
@@ -41,7 +41,7 @@ public class EnchantedItemHeldData extends ItemHeldData implements Serializable 
     }
 
     public void write(Output output) {
-        output.writeByte(VimeReplays.getSerializationUtils().getId(EnchantedItemHeldData.class));
+        output.writeByte(VimeReplays.getSerializationUtils().getId(EnchantedHelmetData.class));
         output.writeShort(getEntityId());
         output.writeShort(getItemId());
         output.writeByte(enchantments.size());
@@ -58,6 +58,6 @@ public class EnchantedItemHeldData extends ItemHeldData implements Serializable 
     public void performAction() {
         NPC npc = VimeReplays.getPlayingManager().getPlayingHandler().getNPCList().get(getEntityId());
         ItemStack itemStack = VimeReplays.getItemUtils().getItemStack(getItemId(), enchantments);
-        npc.setEquipment(EquipmentType.HAND, itemStack);
+        npc.setEquipment(EquipmentType.HELMET, itemStack);
     }
 }
