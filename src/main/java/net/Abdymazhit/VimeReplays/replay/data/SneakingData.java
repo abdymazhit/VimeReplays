@@ -11,14 +11,12 @@ public class SneakingData extends RecordingData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final short entityId;
+    private short entityId;
+
+    public SneakingData() { }
 
     public SneakingData(short entityId) {
         this.entityId = entityId;
-    }
-
-    public SneakingData(Input input) {
-        entityId = input.readShort();
     }
 
     public short getEntityId() {
@@ -28,6 +26,10 @@ public class SneakingData extends RecordingData implements Serializable {
     public void write(Output output) {
         output.writeByte(VimeReplays.getSerializationUtils().getId(SneakingData.class));
         output.writeShort(entityId);
+    }
+
+    public void read(Input input) {
+        entityId = input.readShort();
     }
 
     public void performAction() {

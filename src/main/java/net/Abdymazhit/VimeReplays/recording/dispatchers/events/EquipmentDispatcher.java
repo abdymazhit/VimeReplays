@@ -1,16 +1,25 @@
 package net.Abdymazhit.VimeReplays.recording.dispatchers.events;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
-import org.bukkit.Material;
+import net.Abdymazhit.VimeReplays.customs.EquipmentType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 
 public class EquipmentDispatcher implements Listener {
+
+    @EventHandler
+    public void onPlayerItemHeld(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+
+        if(VimeReplays.getRecordingManager().getRecordablePlayers().contains(player)) {
+            VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.HAND, player.getInventory().getItem(event.getNewSlot()));
+        }
+    }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -33,32 +42,9 @@ public class EquipmentDispatcher implements Listener {
     }
 
     private void checkEquipment(Player player) {
-        ItemStack helmet = player.getInventory().getHelmet();
-        if(helmet != null) {
-            VimeReplays.getRecordingManager().getMainDispatcher().sendHelmetData(player, helmet);
-        } else {
-            VimeReplays.getRecordingManager().getMainDispatcher().sendHelmetData(player, new ItemStack(Material.AIR));
-        }
-
-        ItemStack chestplate = player.getInventory().getChestplate();
-        if(chestplate != null) {
-            VimeReplays.getRecordingManager().getMainDispatcher().sendChestplateData(player, chestplate);
-        } else {
-            VimeReplays.getRecordingManager().getMainDispatcher().sendChestplateData(player, new ItemStack(Material.AIR));
-        }
-
-        ItemStack leggings = player.getInventory().getLeggings();
-        if(leggings != null) {
-            VimeReplays.getRecordingManager().getMainDispatcher().sendLeggingsData(player, leggings);
-        } else {
-            VimeReplays.getRecordingManager().getMainDispatcher().sendLeggingsData(player, new ItemStack(Material.AIR));
-        }
-
-        ItemStack boots = player.getInventory().getBoots();
-        if(boots != null) {
-            VimeReplays.getRecordingManager().getMainDispatcher().sendBootsData(player, boots);
-        } else {
-            VimeReplays.getRecordingManager().getMainDispatcher().sendBootsData(player, new ItemStack(Material.AIR));
-        }
+        VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.HELMET, player.getInventory().getHelmet());
+        VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.CHESTPLATE, player.getInventory().getChestplate());
+        VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.LEGGINGS, player.getInventory().getLeggings());
+        VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.BOOTS, player.getInventory().getBoots());
     }
 }

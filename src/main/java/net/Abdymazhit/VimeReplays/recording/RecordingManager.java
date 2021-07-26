@@ -2,6 +2,7 @@ package net.Abdymazhit.VimeReplays.recording;
 
 import net.Abdymazhit.VimeReplays.Config;
 import net.Abdymazhit.VimeReplays.VimeReplays;
+import net.Abdymazhit.VimeReplays.customs.EquipmentType;
 import net.Abdymazhit.VimeReplays.customs.StatusCode;
 import net.Abdymazhit.VimeReplays.recording.dispatchers.MainDispatcher;
 import net.Abdymazhit.VimeReplays.recording.dispatchers.events.*;
@@ -10,10 +11,8 @@ import net.Abdymazhit.VimeReplays.recording.dispatchers.ticks.MovingDispatcher;
 import net.Abdymazhit.VimeReplays.replay.Replay;
 import net.Abdymazhit.VimeReplays.replay.data.AddPlayerData;
 import net.Abdymazhit.VimeReplays.replay.data.RecordingData;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -76,9 +75,6 @@ public class RecordingManager {
 
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new SneakDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new ArmSwingDispatcher(), VimeReplays.getInstance());
-        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new BlockPlaceDispatcher(), VimeReplays.getInstance());
-        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new BlockBreakDispatcher(), VimeReplays.getInstance());
-        VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new ItemHeldDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new DamageDispatcher(), VimeReplays.getInstance());
         VimeReplays.getInstance().getServer().getPluginManager().registerEvents(new EquipmentDispatcher(), VimeReplays.getInstance());
 
@@ -96,43 +92,13 @@ public class RecordingManager {
             short z = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getZ());
             short yaw = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getYaw());
             short pitch = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getPitch());
-
             mainDispatcher.sendAddPlayerData(new AddPlayerData(playerId, x, y, z, yaw, pitch));
 
-            ItemStack itemInHand = player.getItemInHand();
-            if(itemInHand != null) {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendItemHeldData(player, itemInHand);
-            } else {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendItemHeldData(player, new ItemStack(Material.AIR));
-            }
-
-            ItemStack helmet = player.getInventory().getHelmet();
-            if(helmet != null) {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendHelmetData(player, helmet);
-            } else {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendHelmetData(player, new ItemStack(Material.AIR));
-            }
-
-            ItemStack chestplate = player.getInventory().getChestplate();
-            if(chestplate != null) {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendChestplateData(player, chestplate);
-            } else {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendChestplateData(player, new ItemStack(Material.AIR));
-            }
-
-            ItemStack leggings = player.getInventory().getLeggings();
-            if(leggings != null) {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendLeggingsData(player, leggings);
-            } else {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendLeggingsData(player, new ItemStack(Material.AIR));
-            }
-
-            ItemStack boots = player.getInventory().getBoots();
-            if(boots != null) {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendBootsData(player, boots);
-            } else {
-                VimeReplays.getRecordingManager().getMainDispatcher().sendBootsData(player, new ItemStack(Material.AIR));
-            }
+            VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.HAND, player.getItemInHand());
+            VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.HELMET, player.getInventory().getHelmet());
+            VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.CHESTPLATE, player.getInventory().getChestplate());
+            VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.LEGGINGS, player.getInventory().getLeggings());
+            VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.BOOTS, player.getInventory().getBoots());
         }
     }
 

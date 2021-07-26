@@ -16,15 +16,15 @@ import java.util.UUID;
 
 public class PlayingItems {
 
-    private ItemStack teleportItem;
-    private ItemStack minusItem;
-    private ItemStack backItem;
-    private ItemStack playItem;
-    private ItemStack pauseItem;
-    private ItemStack finishItem;
-    private ItemStack forwardItem;
-    private ItemStack plusItem;
-    private ItemStack settingsItem;
+    private final ItemStack teleportItem;
+    private final ItemStack minusItem;
+    private final ItemStack backItem;
+    private final ItemStack playItem;
+    private final ItemStack pauseItem;
+    private final ItemStack finishItem;
+    private final ItemStack forwardItem;
+    private final ItemStack plusItem;
+    private final ItemStack settingsItem;
 
     public PlayingItems() {
         List<String> lore = Collections.singletonList("§5§oVimeWorld.ru");
@@ -103,19 +103,19 @@ public class PlayingItems {
         if (itemStack.equals(teleportItem)) {
 
         } else if (itemStack.equals(minusItem)) {
-            VimeReplays.getPlayingManager().getPlayingTool().minusPlayingSpeed();
+            VimeReplays.getPlayingManager().getPlayingHandler().minusPlayingSpeed();
         } else if (itemStack.equals(backItem)) {
 
         } else if (itemStack.equals(playItem)) {
-            VimeReplays.getPlayingManager().getPlayingTool().pause();
+            VimeReplays.getPlayingManager().getPlayingHandler().pause();
         } else if (itemStack.equals(pauseItem)) {
-            VimeReplays.getPlayingManager().getPlayingTool().start();
+            VimeReplays.getPlayingManager().getPlayingHandler().start();
         } else if (itemStack.equals(finishItem)) {
-            VimeReplays.getPlayingManager().getPlayingTool().restart();
+            VimeReplays.getPlayingManager().getPlayingHandler().restart();
         } else if (itemStack.equals(forwardItem)) {
 
         } else if (itemStack.equals(plusItem)) {
-            VimeReplays.getPlayingManager().getPlayingTool().plusPlayingSpeed();
+            VimeReplays.getPlayingManager().getPlayingHandler().plusPlayingSpeed();
         } else if (itemStack.equals(settingsItem)) {
 
         }

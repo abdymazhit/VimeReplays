@@ -153,6 +153,6 @@ public class NPC {
     }
 
     public void sendPacket(Packet<?> packet) {
-        ((CraftPlayer) VimeReplays.getPlayingManager().getPlayingTool().getPlayer()).getHandle().playerConnection.sendPacket(packet);
+        ((CraftPlayer) VimeReplays.getPlayingManager().getPlayingHandler().getPlayer()).getHandle().playerConnection.sendPacket(packet);
     }
 }

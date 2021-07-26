@@ -1,7 +1,11 @@
 package net.Abdymazhit.VimeReplays.recording.dispatchers;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
-import net.Abdymazhit.VimeReplays.replay.data.*;
+import net.Abdymazhit.VimeReplays.customs.EquipmentType;
+import net.Abdymazhit.VimeReplays.replay.data.AddPlayerData;
+import net.Abdymazhit.VimeReplays.replay.data.MovingData;
+import net.Abdymazhit.VimeReplays.replay.data.equipment.*;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -11,14 +15,16 @@ import java.util.Map;
 public class MainDispatcher {
 
     private final Map<Short, MovingData> playerLastLocation;
-    private final Map<Short, ItemHeldData> playerLastItemInHand;
-    private final Map<Short, HelmetData> playerLastHelmet;
-    private final Map<Short, ChestplateData> playerLastChestplate;
-    private final Map<Short, LeggingsData> playerLastLeggings;
-    private final Map<Short, BootsData> playerLastBoots;
+
+    private final Map<Short, ItemData> playerLastItemInHand;
+    private final Map<Short, ItemData> playerLastHelmet;
+    private final Map<Short, ItemData> playerLastChestplate;
+    private final Map<Short, ItemData> playerLastLeggings;
+    private final Map<Short, ItemData> playerLastBoots;
 
     public MainDispatcher() {
         playerLastLocation = new HashMap<>();
+
         playerLastItemInHand = new HashMap<>();
         playerLastHelmet = new HashMap<>();
         playerLastChestplate = new HashMap<>();
@@ -47,228 +53,91 @@ public class MainDispatcher {
         }
     }
 
-    public void sendItemHeldData(Player player, ItemStack itemStack) {
+    public void addItemData(Player player, EquipmentType equipmentType, ItemStack itemStack) {
+        if(itemStack == null) {
+            itemStack = new ItemStack(Material.AIR);
+        }
+
         short playerId = VimeReplays.getRecordingManager().getPlayerId(player.getName());
         short itemId = (short) VimeReplays.getItemUtils().getItemId(itemStack);
 
+        Map<Short, ItemData> lastDataMap = null;
+        ItemData data = null;
+
         if(!itemStack.getEnchantments().isEmpty()) {
-            EnchantedItemHeldData data = new EnchantedItemHeldData(playerId, itemId, itemStack.getEnchantments());
-
-            if(playerLastItemInHand.containsKey(data.getEntityId())) {
-                if(playerLastItemInHand.get(data.getEntityId()) instanceof EnchantedItemHeldData) {
-                    EnchantedItemHeldData enchantedItemHeldData = (EnchantedItemHeldData) playerLastItemInHand.get(data.getEntityId());
-
-                    if(enchantedItemHeldData.getItemId() == data.getItemId()) {
-                        if(!enchantedItemHeldData.getEnchantments().equals(data.getEnchantments())) {
-                            playerLastItemInHand.put(data.getEntityId(), data);
-                            VimeReplays.getRecordingManager().addRecordingData(data);
-                        }
-                    } else {
-                        playerLastItemInHand.put(data.getEntityId(), data);
-                        VimeReplays.getRecordingManager().addRecordingData(data);
-                    }
-                } else {
-                    playerLastItemInHand.put(data.getEntityId(), data);
-                    VimeReplays.getRecordingManager().addRecordingData(data);
-                }
-            } else {
-                playerLastItemInHand.put(data.getEntityId(), data);
-                VimeReplays.getRecordingManager().addRecordingData(data);
+            if(equipmentType.equals(EquipmentType.HAND)) {
+                lastDataMap = playerLastItemInHand;
+                data = new EnchantedItemHeldData(playerId, itemId, itemStack.getEnchantments());
+            } else if(equipmentType.equals(EquipmentType.HELMET)) {
+                lastDataMap = playerLastHelmet;
+                data = new EnchantedHelmetData(playerId, itemId, itemStack.getEnchantments());
+            } else if(equipmentType.equals(EquipmentType.CHESTPLATE)) {
+                lastDataMap = playerLastChestplate;
+                data = new EnchantedChestplateData(playerId, itemId, itemStack.getEnchantments());
+            } else if(equipmentType.equals(EquipmentType.LEGGINGS)) {
+                lastDataMap = playerLastLeggings;
+                data = new EnchantedLeggingsData(playerId, itemId, itemStack.getEnchantments());
+            } else if(equipmentType.equals(EquipmentType.BOOTS)) {
+                lastDataMap = playerLastBoots;
+                data = new EnchantedBootsData(playerId, itemId, itemStack.getEnchantments());
             }
+            addLastEnchantedItemData(lastDataMap, (EnchantedItemData) data);
         } else {
-            ItemHeldData data = new ItemHeldData(playerId, itemId);
-
-            if(playerLastItemInHand.containsKey(data.getEntityId())) {
-                ItemHeldData itemHeldData = playerLastItemInHand.get(data.getEntityId());
-
-                if(itemHeldData.getItemId() != data.getItemId()) {
-                    playerLastItemInHand.put(data.getEntityId(), data);
-                    VimeReplays.getRecordingManager().addRecordingData(data);
-                }
-            } else {
-                playerLastItemInHand.put(data.getEntityId(), data);
-                VimeReplays.getRecordingManager().addRecordingData(data);
+            if(equipmentType.equals(EquipmentType.HAND)) {
+                lastDataMap = playerLastItemInHand;
+                data = new ItemHeldData(playerId, itemId);
+            } else if(equipmentType.equals(EquipmentType.HELMET)) {
+                lastDataMap = playerLastHelmet;
+                data = new HelmetData(playerId, itemId);
+            } else if(equipmentType.equals(EquipmentType.CHESTPLATE)) {
+                lastDataMap = playerLastChestplate;
+                data = new ChestplateData(playerId, itemId);
+            } else if(equipmentType.equals(EquipmentType.LEGGINGS)) {
+                lastDataMap = playerLastLeggings;
+                data = new LeggingsData(playerId, itemId);
+            } else if(equipmentType.equals(EquipmentType.BOOTS)) {
+                lastDataMap = playerLastBoots;
+                data = new BootsData(playerId, itemId);
             }
+            addLastItemData(lastDataMap, data);
         }
     }
 
-    public void sendHelmetData(Player player, ItemStack itemStack) {
-        short playerId = VimeReplays.getRecordingManager().getPlayerId(player.getName());
-        short itemId = (short) VimeReplays.getItemUtils().getItemId(itemStack);
+    private void addLastItemData(Map<Short, ItemData> lastDataMap, ItemData data) {
+        if(lastDataMap.containsKey(data.getEntityId())) {
+            ItemData lastData = lastDataMap.get(data.getEntityId());
 
-        if(!itemStack.getEnchantments().isEmpty()) {
-            EnchantedHelmetData data = new EnchantedHelmetData(playerId, itemId, itemStack.getEnchantments());
-
-            if(playerLastHelmet.containsKey(data.getEntityId())) {
-                if(playerLastHelmet.get(data.getEntityId()) instanceof EnchantedHelmetData) {
-                    EnchantedHelmetData enchantedHelmetData = (EnchantedHelmetData) playerLastHelmet.get(data.getEntityId());
-
-                    if(enchantedHelmetData.getItemId() == data.getItemId()) {
-                        if(!enchantedHelmetData.getEnchantments().equals(data.getEnchantments())) {
-                            playerLastHelmet.put(data.getEntityId(), data);
-                            VimeReplays.getRecordingManager().addRecordingData(data);
-                        }
-                    } else {
-                        playerLastHelmet.put(data.getEntityId(), data);
-                        VimeReplays.getRecordingManager().addRecordingData(data);
-                    }
-                } else {
-                    playerLastHelmet.put(data.getEntityId(), data);
-                    VimeReplays.getRecordingManager().addRecordingData(data);
-                }
-            } else {
-                playerLastHelmet.put(data.getEntityId(), data);
+            if(lastData.getItemId() != data.getItemId()) {
+                lastDataMap.put(data.getEntityId(), data);
                 VimeReplays.getRecordingManager().addRecordingData(data);
             }
         } else {
-            HelmetData data = new HelmetData(playerId, itemId);
-
-            if(playerLastHelmet.containsKey(data.getEntityId())) {
-                HelmetData HelmetData = playerLastHelmet.get(data.getEntityId());
-
-                if(HelmetData.getItemId() != data.getItemId()) {
-                    playerLastHelmet.put(data.getEntityId(), data);
-                    VimeReplays.getRecordingManager().addRecordingData(data);
-                }
-            } else {
-                playerLastHelmet.put(data.getEntityId(), data);
-                VimeReplays.getRecordingManager().addRecordingData(data);
-            }
+            lastDataMap.put(data.getEntityId(), data);
+            VimeReplays.getRecordingManager().addRecordingData(data);
         }
     }
 
-    public void sendChestplateData(Player player, ItemStack itemStack) {
-        short playerId = VimeReplays.getRecordingManager().getPlayerId(player.getName());
-        short itemId = (short) VimeReplays.getItemUtils().getItemId(itemStack);
+    private void addLastEnchantedItemData(Map<Short, ItemData> lastDataMap, EnchantedItemData data) {
+        if(lastDataMap.containsKey(data.getEntityId())) {
+            if(lastDataMap.get(data.getEntityId()) instanceof EnchantedItemData) {
+                EnchantedItemData enchantedHelmetData = (EnchantedItemData) lastDataMap.get(data.getEntityId());
 
-        if(!itemStack.getEnchantments().isEmpty()) {
-            EnchantedChestplateData data = new EnchantedChestplateData(playerId, itemId, itemStack.getEnchantments());
-
-            if(playerLastChestplate.containsKey(data.getEntityId())) {
-                if(playerLastChestplate.get(data.getEntityId()) instanceof EnchantedChestplateData) {
-                    EnchantedChestplateData enchantedChestplateData = (EnchantedChestplateData) playerLastChestplate.get(data.getEntityId());
-
-                    if(enchantedChestplateData.getItemId() == data.getItemId()) {
-                        if(!enchantedChestplateData.getEnchantments().equals(data.getEnchantments())) {
-                            playerLastChestplate.put(data.getEntityId(), data);
-                            VimeReplays.getRecordingManager().addRecordingData(data);
-                        }
-                    } else {
-                        playerLastChestplate.put(data.getEntityId(), data);
+                if(enchantedHelmetData.getItemId() == data.getItemId()) {
+                    if(!enchantedHelmetData.getEnchantments().equals(data.getEnchantments())) {
+                        lastDataMap.put(data.getEntityId(), data);
                         VimeReplays.getRecordingManager().addRecordingData(data);
                     }
                 } else {
-                    playerLastChestplate.put(data.getEntityId(), data);
+                    lastDataMap.put(data.getEntityId(), data);
                     VimeReplays.getRecordingManager().addRecordingData(data);
                 }
             } else {
-                playerLastChestplate.put(data.getEntityId(), data);
+                lastDataMap.put(data.getEntityId(), data);
                 VimeReplays.getRecordingManager().addRecordingData(data);
             }
         } else {
-            ChestplateData data = new ChestplateData(playerId, itemId);
-
-            if(playerLastChestplate.containsKey(data.getEntityId())) {
-                ChestplateData ChestplateData = playerLastChestplate.get(data.getEntityId());
-
-                if(ChestplateData.getItemId() != data.getItemId()) {
-                    playerLastChestplate.put(data.getEntityId(), data);
-                    VimeReplays.getRecordingManager().addRecordingData(data);
-                }
-            } else {
-                playerLastChestplate.put(data.getEntityId(), data);
-                VimeReplays.getRecordingManager().addRecordingData(data);
-            }
-        }
-    }
-
-    public void sendLeggingsData(Player player, ItemStack itemStack) {
-        short playerId = VimeReplays.getRecordingManager().getPlayerId(player.getName());
-        short itemId = (short) VimeReplays.getItemUtils().getItemId(itemStack);
-
-        if(!itemStack.getEnchantments().isEmpty()) {
-            EnchantedLeggingsData data = new EnchantedLeggingsData(playerId, itemId, itemStack.getEnchantments());
-
-            if(playerLastLeggings.containsKey(data.getEntityId())) {
-                if(playerLastLeggings.get(data.getEntityId()) instanceof EnchantedLeggingsData) {
-                    EnchantedLeggingsData enchantedLeggingsData = (EnchantedLeggingsData) playerLastLeggings.get(data.getEntityId());
-
-                    if(enchantedLeggingsData.getItemId() == data.getItemId()) {
-                        if(!enchantedLeggingsData.getEnchantments().equals(data.getEnchantments())) {
-                            playerLastLeggings.put(data.getEntityId(), data);
-                            VimeReplays.getRecordingManager().addRecordingData(data);
-                        }
-                    } else {
-                        playerLastLeggings.put(data.getEntityId(), data);
-                        VimeReplays.getRecordingManager().addRecordingData(data);
-                    }
-                } else {
-                    playerLastLeggings.put(data.getEntityId(), data);
-                    VimeReplays.getRecordingManager().addRecordingData(data);
-                }
-            } else {
-                playerLastLeggings.put(data.getEntityId(), data);
-                VimeReplays.getRecordingManager().addRecordingData(data);
-            }
-        } else {
-            LeggingsData data = new LeggingsData(playerId, itemId);
-
-            if(playerLastLeggings.containsKey(data.getEntityId())) {
-                LeggingsData LeggingsData = playerLastLeggings.get(data.getEntityId());
-
-                if(LeggingsData.getItemId() != data.getItemId()) {
-                    playerLastLeggings.put(data.getEntityId(), data);
-                    VimeReplays.getRecordingManager().addRecordingData(data);
-                }
-            } else {
-                playerLastLeggings.put(data.getEntityId(), data);
-                VimeReplays.getRecordingManager().addRecordingData(data);
-            }
-        }
-    }
-
-    public void sendBootsData(Player player, ItemStack itemStack) {
-        short playerId = VimeReplays.getRecordingManager().getPlayerId(player.getName());
-        short itemId = (short) VimeReplays.getItemUtils().getItemId(itemStack);
-
-        if(!itemStack.getEnchantments().isEmpty()) {
-            EnchantedBootsData data = new EnchantedBootsData(playerId, itemId, itemStack.getEnchantments());
-
-            if(playerLastBoots.containsKey(data.getEntityId())) {
-                if(playerLastBoots.get(data.getEntityId()) instanceof EnchantedBootsData) {
-                    EnchantedBootsData enchantedBootsData = (EnchantedBootsData) playerLastBoots.get(data.getEntityId());
-
-                    if(enchantedBootsData.getItemId() == data.getItemId()) {
-                        if(!enchantedBootsData.getEnchantments().equals(data.getEnchantments())) {
-                            playerLastBoots.put(data.getEntityId(), data);
-                            VimeReplays.getRecordingManager().addRecordingData(data);
-                        }
-                    } else {
-                        playerLastBoots.put(data.getEntityId(), data);
-                        VimeReplays.getRecordingManager().addRecordingData(data);
-                    }
-                } else {
-                    playerLastBoots.put(data.getEntityId(), data);
-                    VimeReplays.getRecordingManager().addRecordingData(data);
-                }
-            } else {
-                playerLastBoots.put(data.getEntityId(), data);
-                VimeReplays.getRecordingManager().addRecordingData(data);
-            }
-        } else {
-            BootsData data = new BootsData(playerId, itemId);
-
-            if(playerLastBoots.containsKey(data.getEntityId())) {
-                BootsData BootsData = playerLastBoots.get(data.getEntityId());
-
-                if(BootsData.getItemId() != data.getItemId()) {
-                    playerLastBoots.put(data.getEntityId(), data);
-                    VimeReplays.getRecordingManager().addRecordingData(data);
-                }
-            } else {
-                playerLastBoots.put(data.getEntityId(), data);
-                VimeReplays.getRecordingManager().addRecordingData(data);
-            }
+            lastDataMap.put(data.getEntityId(), data);
+            VimeReplays.getRecordingManager().addRecordingData(data);
         }
     }
 }

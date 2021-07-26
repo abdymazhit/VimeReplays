@@ -8,14 +8,12 @@ import java.io.Serializable;
 
 public class RemovePlayerData extends RecordingData implements Serializable {
 
-    private final short entityId;
+    private short entityId;
+
+    public RemovePlayerData() { }
 
     public RemovePlayerData(short entityId) {
         this.entityId = entityId;
-    }
-
-    public RemovePlayerData(Input input) {
-        entityId = input.readShort();
     }
 
     public short getEntityId() {
@@ -25,5 +23,9 @@ public class RemovePlayerData extends RecordingData implements Serializable {
     public void write(Output output) {
         output.writeByte(VimeReplays.getSerializationUtils().getId(RemovePlayerData.class));
         output.writeShort(entityId);
+    }
+
+    public void read(Input input) {
+        entityId = input.readShort();
     }
 }

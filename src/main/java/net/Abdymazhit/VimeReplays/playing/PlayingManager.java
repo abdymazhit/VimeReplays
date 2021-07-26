@@ -24,13 +24,11 @@ public class PlayingManager {
 
     private final Replay replay;
     private final PlayingItems playingItems;
-    private final PlayingTool playingTool;
     private final PlayingHandler playingHandler;
 
     public PlayingManager(String gameName, String mapName) {
         replay = VimeReplays.getFileUtils().readFile();
         playingItems = new PlayingItems();
-        playingTool = new PlayingTool();
         playingHandler = new PlayingHandler();
 
         startActionBarTask();
@@ -74,11 +72,11 @@ public class PlayingManager {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if(getPlayingTool().getPlayer() != null) {
-                    Player player = getPlayingTool().getPlayer();
+                if(getPlayingHandler().getPlayer() != null) {
+                    Player player = getPlayingHandler().getPlayer();
                     String message = "";
 
-                    PlayingStatus playingStatus = VimeReplays.getPlayingManager().getPlayingTool().getPlayingStatus();
+                    PlayingStatus playingStatus = VimeReplays.getPlayingManager().getPlayingHandler().getPlayingStatus();
 
                     if(playingStatus.equals(PlayingStatus.PLAY)) {
                         message += "§aВОСПРОИЗВЕДЕНИЕ";
@@ -88,9 +86,9 @@ public class PlayingManager {
                         message += "§bЗАВЕРШЕНО";
                     }
                     message += "         ";
-                    message += "§e" + VimeReplays.getPlayingManager().getPlayingTool().getCurrentTick() + "/" + replay.records.size();
+                    message += "§e" + VimeReplays.getPlayingManager().getPlayingHandler().getCurrentTick() + "/" + replay.records.size();
                     message += "         ";
-                    message += "§6" + VimeReplays.getPlayingManager().getPlayingTool().getPlayingSpeed() + "x";
+                    message += "§6" + VimeReplays.getPlayingManager().getPlayingHandler().getPlayingSpeed() + "x";
 
                     sendActionbar(player, message);
                 }
@@ -110,10 +108,6 @@ public class PlayingManager {
 
     public PlayingItems getPlayingItems() {
         return playingItems;
-    }
-
-    public PlayingTool getPlayingTool() {
-        return playingTool;
     }
 
     public PlayingHandler getPlayingHandler() {

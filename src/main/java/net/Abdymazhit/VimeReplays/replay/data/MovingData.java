@@ -11,12 +11,14 @@ public class MovingData extends RecordingData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final short entityId;
-    private final short x;
-    private final short y;
-    private final short z;
-    private final short yaw;
-    private final short pitch;
+    private short entityId;
+    private short x;
+    private short y;
+    private short z;
+    private short yaw;
+    private short pitch;
+
+    public MovingData() { }
 
     public MovingData(short entityId, short x, short y, short z, short yaw, short pitch) {
         this.entityId = entityId;
@@ -25,15 +27,6 @@ public class MovingData extends RecordingData implements Serializable {
         this.z = z;
         this.yaw = yaw;
         this.pitch = pitch;
-    }
-
-    public MovingData(Input input) {
-        entityId = input.readShort();
-        x = input.readShort();
-        y = input.readShort();
-        z = input.readShort();
-        yaw = input.readShort();
-        pitch = input.readShort();
     }
 
     public short getEntityId() {
@@ -68,6 +61,15 @@ public class MovingData extends RecordingData implements Serializable {
         output.writeShort(z);
         output.writeShort(yaw);
         output.writeShort(pitch);
+    }
+
+    public void read(Input input) {
+        entityId = input.readShort();
+        x = input.readShort();
+        y = input.readShort();
+        z = input.readShort();
+        yaw = input.readShort();
+        pitch = input.readShort();
     }
 
     public void performAction() {

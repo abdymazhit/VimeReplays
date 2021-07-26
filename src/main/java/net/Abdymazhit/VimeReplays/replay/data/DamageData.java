@@ -12,14 +12,12 @@ public class DamageData extends RecordingData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final short entityId;
+    private short entityId;
+
+    public DamageData() { }
 
     public DamageData(short entityId) {
         this.entityId = entityId;
-    }
-
-    public DamageData(Input input) {
-        entityId = input.readShort();
     }
 
     public short getEntityId() {
@@ -29,6 +27,10 @@ public class DamageData extends RecordingData implements Serializable {
     public void write(Output output) {
         output.writeByte(VimeReplays.getSerializationUtils().getId(DamageData.class));
         output.writeShort(entityId);
+    }
+
+    public void read(Input input) {
+        entityId = input.readShort();
     }
 
     public void performAction() {

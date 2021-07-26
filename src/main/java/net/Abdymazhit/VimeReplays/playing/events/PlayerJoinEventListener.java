@@ -20,7 +20,7 @@ public class PlayerJoinEventListener implements Listener {
         if(Bukkit.getOnlinePlayers().size() > 1) {
             player.kickPlayer("Ошибка подключения! Сервер занят другим игроком!");
         } else {
-            VimeReplays.getPlayingManager().getPlayingTool().setPlayer(player);
+            VimeReplays.getPlayingManager().getPlayingHandler().setPlayer(player);
 
             Location spawn = Bukkit.getWorld("replayMap").getSpawnLocation();
             player.teleport(spawn);
@@ -43,7 +43,7 @@ public class PlayerJoinEventListener implements Listener {
 
             VimeReplays.getPlayingManager().getPlayingItems().giveItems(player);
 
-            VimeReplays.getPlayingManager().getPlayingTool().performFirstTickActions();
+            VimeReplays.getPlayingManager().getPlayingHandler().performFirstTickActions();
         }
     }
 

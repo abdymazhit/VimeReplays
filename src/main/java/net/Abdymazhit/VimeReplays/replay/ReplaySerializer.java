@@ -37,7 +37,7 @@ public class ReplaySerializer extends Serializer<Replay> {
             output.writeVarInt(tickRecordsSize, true);
 
             for(RecordingData tickRecord : tickRecords) {
-                VimeReplays.getSerializationUtils().writeData(tickRecord, output);
+                tickRecord.write(output);
             }
         }
 
@@ -68,7 +68,13 @@ public class ReplaySerializer extends Serializer<Replay> {
             List<RecordingData> tickRecords = new ArrayList<>();
             for(int i=0; i<tickRecordsSize; i++) {
                 byte dataType = input.readByte();
-                tickRecords.add(VimeReplays.getSerializationUtils().readData(dataType, input));
+                try {
+                    RecordingData recordingData = (RecordingData) VimeReplays.getSerializationUtils().getData(dataType).newInstance();
+                    recordingData.read(input);
+                    tickRecords.add(recordingData);
+                } catch (InstantiationException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
 
             records.put(tick, tickRecords);

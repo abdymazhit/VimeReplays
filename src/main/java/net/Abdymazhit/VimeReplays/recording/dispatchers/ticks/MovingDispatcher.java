@@ -18,9 +18,7 @@ public class MovingDispatcher extends BukkitRunnable {
             short yaw = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getYaw());
             short pitch = VimeReplays.getLocationUtils().getLocationShort(player.getLocation().getPitch());
 
-            MovingData movingData = new MovingData(playerId, x, y, z, yaw, pitch);
-
-            VimeReplays.getRecordingManager().getMainDispatcher().sendMovingData(movingData);
+            VimeReplays.getRecordingManager().getMainDispatcher().sendMovingData(new MovingData(playerId, x, y, z, yaw, pitch));
         }
     }
 }
