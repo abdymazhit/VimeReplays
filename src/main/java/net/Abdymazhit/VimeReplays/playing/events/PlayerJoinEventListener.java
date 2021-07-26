@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 public class PlayerJoinEventListener implements Listener {
 
@@ -37,9 +39,22 @@ public class PlayerJoinEventListener implements Listener {
             player.setFlying(true);
             player.setFlySpeed(0.1f);
 
+            addToTabList(player);
+
             VimeReplays.getPlayingManager().getPlayingItems().giveItems(player);
 
             VimeReplays.getPlayingManager().getPlayingTool().performFirstTickActions();
         }
+    }
+
+    private void addToTabList(Player player) {
+        Scoreboard scoreboard = player.getScoreboard();
+        Team team = scoreboard.getTeam(player.getName());
+        if(team == null) {
+            team = scoreboard.registerNewTeam(player.getName());
+        }
+        team.setPrefix("§7");
+        team.setSuffix(" [ЗРИТЕЛЬ]");
+        team.addPlayer(player);
     }
 }

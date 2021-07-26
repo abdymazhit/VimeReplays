@@ -17,7 +17,6 @@ public class VimeReplays extends JavaPlugin {
     private static SerializationUtils serializationUtils;
     private static LocationUtils locationUtils;
     private static ItemUtils itemUtils;
-    private static EnchantmentUtils enchantmentUtils;
 
     @Override
     public void onEnable() {
@@ -28,7 +27,6 @@ public class VimeReplays extends JavaPlugin {
         serializationUtils = new SerializationUtils();
         locationUtils = new LocationUtils();
         itemUtils = new ItemUtils();
-        enchantmentUtils = new EnchantmentUtils();
 
         if(Config.mode.equals(Mode.RECORDER)) {
             recordingManager = new RecordingManager();
@@ -46,19 +44,27 @@ public class VimeReplays extends JavaPlugin {
         return instance;
     }
 
-    public static RecordingManager getRecordingManager() { return recordingManager; }
+    public static RecordingManager getRecordingManager() {
+        return recordingManager;
+    }
 
-    public static PlayingManager getPlayingManager() { return playingManager; }
+    public static PlayingManager getPlayingManager() {
+        return playingManager;
+    }
 
-    public static FileUtils getFileUtils() { return fileUtils; }
+    public static FileUtils getFileUtils() {
+        return fileUtils;
+    }
 
     public static SerializationUtils getSerializationUtils() {
         return serializationUtils;
     }
 
-    public static LocationUtils getLocationUtils() { return locationUtils; }
+    public static LocationUtils getLocationUtils() {
+        return locationUtils;
+    }
 
-    public static ItemUtils getItemUtils() { return itemUtils; }
-
-    public static EnchantmentUtils getEnchantmentUtils() { return enchantmentUtils; }
+    public static ItemUtils getItemUtils() {
+        return itemUtils;
+    }
 }

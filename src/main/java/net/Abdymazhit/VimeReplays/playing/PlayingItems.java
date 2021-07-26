@@ -2,6 +2,7 @@ package net.Abdymazhit.VimeReplays.playing;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.Abdymazhit.VimeReplays.VimeReplays;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,10 +27,6 @@ public class PlayingItems {
     private ItemStack settingsItem;
 
     public PlayingItems() {
-        createItems();
-    }
-
-    private void createItems() {
         List<String> lore = Collections.singletonList("§5§oVimeWorld.ru");
 
         teleportItem = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
@@ -102,6 +99,28 @@ public class PlayingItems {
         player.getInventory().setItem(8, settingsItem);
     }
 
+    public void performClickAction(ItemStack itemStack) {
+        if (itemStack.equals(teleportItem)) {
+
+        } else if (itemStack.equals(minusItem)) {
+            VimeReplays.getPlayingManager().getPlayingTool().minusPlayingSpeed();
+        } else if (itemStack.equals(backItem)) {
+
+        } else if (itemStack.equals(playItem)) {
+            VimeReplays.getPlayingManager().getPlayingTool().pause();
+        } else if (itemStack.equals(pauseItem)) {
+            VimeReplays.getPlayingManager().getPlayingTool().start();
+        } else if (itemStack.equals(finishItem)) {
+            VimeReplays.getPlayingManager().getPlayingTool().restart();
+        } else if (itemStack.equals(forwardItem)) {
+
+        } else if (itemStack.equals(plusItem)) {
+            VimeReplays.getPlayingManager().getPlayingTool().plusPlayingSpeed();
+        } else if (itemStack.equals(settingsItem)) {
+
+        }
+    }
+
     private ItemStack getSkull(String value) {
         ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
@@ -130,41 +149,5 @@ public class PlayingItems {
 
     public void giveFinishItem(Player player) {
         player.getInventory().setItem(4, finishItem);
-    }
-
-    public ItemStack getTeleportItem() {
-        return teleportItem;
-    }
-
-    public ItemStack getMinusItem() {
-        return minusItem;
-    }
-
-    public ItemStack getBackItem() {
-        return backItem;
-    }
-
-    public ItemStack getPlayItem() {
-        return playItem;
-    }
-
-    public ItemStack getPauseItem() {
-        return pauseItem;
-    }
-
-    public ItemStack getFinishItem() {
-        return finishItem;
-    }
-
-    public ItemStack getForwardItem() {
-        return forwardItem;
-    }
-
-    public ItemStack getPlusItem() {
-        return plusItem;
-    }
-
-    public ItemStack getSettingsItem() {
-        return settingsItem;
     }
 }

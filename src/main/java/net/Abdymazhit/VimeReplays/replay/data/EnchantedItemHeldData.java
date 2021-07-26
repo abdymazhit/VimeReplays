@@ -32,7 +32,7 @@ public class EnchantedItemHeldData extends ItemHeldData implements Serializable 
             byte enchantmentId = input.readByte();
             byte level = input.readByte();
 
-            enchantments.put(VimeReplays.getEnchantmentUtils().getEnchantment(enchantmentId), (int) level);
+            enchantments.put(Enchantment.getById(enchantmentId), (int) level);
         }
     }
 
@@ -47,7 +47,7 @@ public class EnchantedItemHeldData extends ItemHeldData implements Serializable 
         output.writeByte(enchantments.size());
 
         for(Enchantment enchantment : enchantments.keySet()) {
-            byte enchantmentId = VimeReplays.getEnchantmentUtils().getEnchantmentId(enchantment);
+            byte enchantmentId = (byte) enchantment.getId();
             byte level = enchantments.get(enchantment).byteValue();
 
             output.writeByte(enchantmentId);

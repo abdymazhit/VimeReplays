@@ -9,9 +9,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.UUID;
 
 public class NPC {
@@ -33,7 +35,33 @@ public class NPC {
         sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
         sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, npc));
 
+        addToTabList();
+
         setHeadRotation(yaw, pitch);
+    }
+
+    public void addToTabList() {
+        PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo();
+
+        List<PacketPlayOutPlayerInfo.PlayerInfoData> players = (List<PacketPlayOutPlayerInfo.PlayerInfoData>) getValue(packet, "b");
+        players.add(packet.new PlayerInfoData(npc.getProfile(), 1, WorldSettings.EnumGamemode.NOT_SET, CraftChatMessage.fromString(npc.getProfile().getName())[0]));
+
+        setValue(packet, "a", PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER);
+        setValue(packet, "b", players);
+
+        sendPacket(packet);
+    }
+
+    public void removeFromTabList() {
+        PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo();
+
+        List<PacketPlayOutPlayerInfo.PlayerInfoData> players = (List<PacketPlayOutPlayerInfo.PlayerInfoData>) getValue(packet, "b");
+        players.add(packet.new PlayerInfoData(npc.getProfile(), 1, WorldSettings.EnumGamemode.NOT_SET, CraftChatMessage.fromString(npc.getProfile().getName())[0]));
+
+        setValue(packet, "a", PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER);
+        setValue(packet, "b", players);
+
+        sendPacket(packet);
     }
 
     public void teleport(double x, double y, double z, float yaw, float pitch) {
@@ -103,14 +131,25 @@ public class NPC {
         sendPacket(packet);
     }
 
-    public void setValue(Object obj,String name,Object value) {
-        try{
+    public void setValue(Object obj, String name, Object value) {
+        try {
             Field field = obj.getClass().getDeclaredField(name);
             field.setAccessible(true);
             field.set(obj, value);
         } catch(Exception ignored) {
 
         }
+    }
+
+    public Object getValue(Object obj, String name) {
+        try {
+            Field field = obj.getClass().getDeclaredField(name);
+            field.setAccessible(true);
+            return field.get(obj);
+        } catch(Exception ignored) {
+
+        }
+        return null;
     }
 
     public void sendPacket(Packet<?> packet) {

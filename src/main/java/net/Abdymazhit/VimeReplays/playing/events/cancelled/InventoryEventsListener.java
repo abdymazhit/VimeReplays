@@ -30,6 +30,12 @@ public class InventoryEventsListener implements Listener {
         event.setCancelled(true);
     }
 
+    // Событие клика по инвентарю
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        event.setCancelled(true);
+    }
+
     // Событие поднятия предмета инвентарём (хоппер)
     @EventHandler
     public void onInventoryPickupItem(InventoryPickupItemEvent event) {
