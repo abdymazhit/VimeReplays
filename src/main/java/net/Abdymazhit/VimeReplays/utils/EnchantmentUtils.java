@@ -5,55 +5,55 @@ import org.bukkit.enchantments.Enchantment;
 public class EnchantmentUtils {
 
     public byte getEnchantmentId(Enchantment enchantment) {
-        if(enchantment == Enchantment.ARROW_DAMAGE) {
+        if(enchantment.equals(Enchantment.ARROW_DAMAGE)) {
             return 0;
-        } else if(enchantment == Enchantment.ARROW_FIRE) {
+        } else if(enchantment.equals(Enchantment.ARROW_FIRE)) {
             return 1;
-        } else if(enchantment == Enchantment.ARROW_INFINITE) {
+        } else if(enchantment.equals(Enchantment.ARROW_INFINITE)) {
             return 2;
-        } else if(enchantment == Enchantment.ARROW_KNOCKBACK) {
+        } else if(enchantment.equals(Enchantment.ARROW_KNOCKBACK)) {
             return 3;
-        } else if(enchantment == Enchantment.DAMAGE_ALL) {
+        } else if(enchantment.equals(Enchantment.DAMAGE_ALL)) {
             return 4;
-        } else if(enchantment == Enchantment.DAMAGE_ARTHROPODS) {
+        } else if(enchantment.equals(Enchantment.DAMAGE_ARTHROPODS)) {
             return 5;
-        } else if(enchantment == Enchantment.DAMAGE_UNDEAD) {
+        } else if(enchantment.equals(Enchantment.DAMAGE_UNDEAD)) {
             return 6;
-        } else if(enchantment == Enchantment.DEPTH_STRIDER) {
+        } else if(enchantment.equals(Enchantment.DEPTH_STRIDER)) {
             return 7;
-        } else if(enchantment == Enchantment.DIG_SPEED) {
+        } else if(enchantment.equals(Enchantment.DIG_SPEED)) {
             return 8;
-        } else if(enchantment == Enchantment.DURABILITY) {
+        } else if(enchantment.equals(Enchantment.DURABILITY)) {
             return 9;
-        } else if(enchantment == Enchantment.FIRE_ASPECT) {
+        } else if(enchantment.equals(Enchantment.FIRE_ASPECT)) {
             return 10;
-        } else if(enchantment == Enchantment.KNOCKBACK) {
+        } else if(enchantment.equals(Enchantment.KNOCKBACK)) {
             return 11;
-        } else if(enchantment == Enchantment.LOOT_BONUS_BLOCKS) {
+        } else if(enchantment.equals(Enchantment.LOOT_BONUS_BLOCKS)) {
             return 12;
-        } else if(enchantment == Enchantment.LOOT_BONUS_MOBS) {
+        } else if(enchantment.equals(Enchantment.LOOT_BONUS_MOBS)) {
             return 13;
-        } else if(enchantment == Enchantment.LUCK) {
+        } else if(enchantment.equals(Enchantment.LUCK)) {
             return 14;
-        } else if(enchantment == Enchantment.LURE) {
+        } else if(enchantment.equals(Enchantment.LURE)) {
             return 15;
-        } else if(enchantment == Enchantment.OXYGEN) {
+        } else if(enchantment.equals(Enchantment.OXYGEN)) {
             return 16;
-        } else if(enchantment == Enchantment.PROTECTION_ENVIRONMENTAL) {
+        } else if(enchantment.equals(Enchantment.PROTECTION_ENVIRONMENTAL)) {
             return 17;
-        } else if(enchantment == Enchantment.PROTECTION_EXPLOSIONS) {
+        } else if(enchantment.equals(Enchantment.PROTECTION_EXPLOSIONS)) {
             return 18;
-        } else if(enchantment == Enchantment.PROTECTION_FALL) {
+        } else if(enchantment.equals(Enchantment.PROTECTION_FALL)) {
             return 19;
-        } else if(enchantment == Enchantment.PROTECTION_FIRE) {
+        } else if(enchantment.equals(Enchantment.PROTECTION_FIRE)) {
             return 20;
-        } else if(enchantment == Enchantment.PROTECTION_PROJECTILE) {
+        } else if(enchantment.equals(Enchantment.PROTECTION_PROJECTILE)) {
             return 21;
-        } else if(enchantment == Enchantment.SILK_TOUCH) {
+        } else if(enchantment.equals(Enchantment.SILK_TOUCH)) {
             return 22;
-        } else if(enchantment == Enchantment.THORNS) {
+        } else if(enchantment.equals(Enchantment.THORNS)) {
             return 23;
-        } else if(enchantment == Enchantment.WATER_WORKER) {
+        } else if(enchantment.equals(Enchantment.WATER_WORKER)) {
             return 24;
         } else {
             return -1;

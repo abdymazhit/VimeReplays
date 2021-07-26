@@ -25,6 +25,8 @@ public class SerializationUtils {
         dataTypeId.put(BlockPlaceData.class, 9);
         dataTypeId.put(EnchantedItemHeldData.class, 10);
         dataTypeId.put(ItemHeldData.class, 11);
+        dataTypeId.put(EnchantedEquipmentData.class, 12);
+        dataTypeId.put(EquipmentData.class, 13);
     }
 
     public void writeData(RecordingData recordingData, Output output) {
@@ -61,6 +63,12 @@ public class SerializationUtils {
         } else if(recordingData instanceof ItemHeldData) {
             ItemHeldData data = (ItemHeldData) recordingData;
             data.write(output);
+        } else if(recordingData instanceof EnchantedEquipmentData) {
+            EnchantedEquipmentData data = (EnchantedEquipmentData) recordingData;
+            data.write(output);
+        } else if(recordingData instanceof EquipmentData) {
+            EquipmentData data = (EquipmentData) recordingData;
+            data.write(output);
         }
     }
 
@@ -89,6 +97,10 @@ public class SerializationUtils {
             return new EnchantedItemHeldData(input);
         } else if(data == ItemHeldData.class) {
             return new ItemHeldData(input);
+        } else if(data == EnchantedEquipmentData.class) {
+            return new EnchantedEquipmentData(input);
+        } else if(data == EquipmentData.class) {
+            return new EquipmentData(input);
         }
 
         return null;
@@ -99,12 +111,11 @@ public class SerializationUtils {
     }
 
     public Class<?> getData(int id) {
-        Class<?> data = null;
         for(Class<?> c : dataTypeId.keySet()) {
             if(dataTypeId.get(c) == id) {
-                data = c;
+                return c;
             }
         }
-        return data;
+        return null;
     }
 }
