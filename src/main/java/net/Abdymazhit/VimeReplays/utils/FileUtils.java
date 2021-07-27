@@ -17,20 +17,36 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Отвечает за работу с файлами плагина
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class FileUtils {
 
+    /**
+     * Сохраняет игру в виде файла
+     */
     public void saveFile(Replay replay) {
         serialize(replay);
         compress();
         upload();
     }
 
+    /**
+     * Конвертирует файл записи игры на запись игры
+     * Возвращает запись игры
+     */
     public Replay readFile() {
         download();
         decompress();
         return deserialize();
     }
 
+    /**
+     * Сериализирует запись игры
+     */
     private void serialize(Replay replay) {
         try {
             Kryo kryo = new Kryo();
@@ -51,6 +67,9 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Компрессирует запись игры
+     */
     private void compress() {
         try {
             byte[] data = Files.readAllBytes(Paths.get(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.replay"));
@@ -73,14 +92,23 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Загружает файл записи игры в файловое хранилище
+     */
     public void upload() {
 
     }
 
+    /**
+     * Скачивает файл записи игры из файлового хранилища
+     */
     public void download() {
 
     }
 
+    /**
+     * Декомпрессирует запись игры
+     */
     private void decompress() {
         try {
             String path = null;
@@ -118,6 +146,9 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Десериализирует запись игры
+     */
     private Replay deserialize() {
         try {
             Kryo kryo = new Kryo();

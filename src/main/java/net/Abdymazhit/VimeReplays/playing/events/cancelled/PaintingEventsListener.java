@@ -6,21 +6,33 @@ import org.bukkit.event.painting.PaintingBreakByEntityEvent;
 import org.bukkit.event.painting.PaintingBreakEvent;
 import org.bukkit.event.painting.PaintingPlaceEvent;
 
+/**
+ * Отменяет события связанные с картиной
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class PaintingEventsListener implements Listener {
 
-    // Событие ломания картины от entity
+    /**
+     * Событие ломания картины от entity
+     */
     @EventHandler
     public void onPaintingBreakByEntity(PaintingBreakByEntityEvent event) {
         event.setCancelled(true);
     }
 
-    // Событие ломания картины
+    /**
+     * Событие ломания картины
+     */
     @EventHandler
     public void onPaintingBreakEvent(PaintingBreakEvent event) {
         event.setCancelled(true);
     }
 
-    // Событие поставки картины
+    /**
+     * Событие поставки картины
+     */
     @EventHandler
     public void onPaintingPlace(PaintingPlaceEvent event) {
         event.setCancelled(true);

@@ -5,8 +5,17 @@ import net.Abdymazhit.VimeReplays.replay.data.MovingData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * Диспетчер обработки движений игрока
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class MovingDispatcher extends BukkitRunnable {
 
+    /**
+     * Каждый тик проверяет движения игроков и отправляет запись о движений
+     */
     @Override
     public void run() {
         for(Player player : VimeReplays.getRecordingManager().getRecordablePlayers()) {

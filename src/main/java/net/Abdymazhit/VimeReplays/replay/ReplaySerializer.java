@@ -12,8 +12,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Протокол сериализации
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class ReplaySerializer extends Serializer<Replay> {
 
+    /**
+     * Записывает запись игры (сериализирует)
+     */
     public void write(Kryo kryo, Output output, Replay replay) {
         output.writeByte(replay.gameName);
         output.writeByte(replay.gameType);
@@ -45,6 +54,9 @@ public class ReplaySerializer extends Serializer<Replay> {
         output.close();
     }
 
+    /**
+     * Читает запись игры (десериализирует) и возвращает запись игры
+     */
     public Replay read(Kryo kryo, Input input, Class<? extends Replay> type) {
         byte gameName = input.readByte();
         byte gameType = input.readByte();

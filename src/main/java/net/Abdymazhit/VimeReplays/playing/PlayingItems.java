@@ -14,18 +14,44 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Отвечает за работу предметов воспроизведения игры
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class PlayingItems {
 
+    /** Предмет телепортации к NPC */
     private final ItemStack teleportItem;
+
+    /** Предмет уменьшения скорости воспроизведения игры */
     private final ItemStack minusItem;
+
+    /** Предмет перемотки назад воспроизведения игры */
     private final ItemStack backItem;
+
+    /** Предмет начала воспроизведения игры */
     private final ItemStack playItem;
+
+    /** Предмет поставки на паузу воспроизведения игры */
     private final ItemStack pauseItem;
+
+    /** Предмет завершения воспроизведения игры */
     private final ItemStack finishItem;
+
+    /** Предмет перемотки вперед воспроизведения игры */
     private final ItemStack forwardItem;
+
+    /** Предмет увеличения скорости воспроизведения игры */
     private final ItemStack plusItem;
+
+    /** Предмет настройки воспроизведения игры */
     private final ItemStack settingsItem;
 
+    /**
+     * Инициализирует предметы воспроизведения игры
+     */
     public PlayingItems() {
         List<String> lore = Collections.singletonList("§5§oVimeWorld.ru");
 
@@ -84,6 +110,9 @@ public class PlayingItems {
         settingsItem.setItemMeta(settingsItemMeta);
     }
 
+    /**
+     * Выдает зрителю предметы воспроизведения игры
+     */
     public void giveItems(Player player) {
         player.getInventory().setHelmet(null);
         player.getInventory().setChestplate(null);
@@ -99,6 +128,9 @@ public class PlayingItems {
         player.getInventory().setItem(8, settingsItem);
     }
 
+    /**
+     * Выдает действия связанные с предметами воспроизведения игры
+     */
     public void performClickAction(ItemStack itemStack) {
         if (itemStack.equals(teleportItem)) {
 
@@ -121,6 +153,9 @@ public class PlayingItems {
         }
     }
 
+    /**
+     * Возвращает предмет головы по текстурке
+     */
     private ItemStack getSkull(String value) {
         ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
@@ -139,14 +174,23 @@ public class PlayingItems {
         return skull;
     }
 
+    /**
+     * Выдает игроку предмет начала воспроизведения игры
+     */
     public void givePlayItem(Player player) {
         player.getInventory().setItem(4, playItem);
     }
 
+    /**
+     * Выдает игроку предмет поставки на паузу воспроизведения игры
+     */
     public void givePauseItem(Player player) {
         player.getInventory().setItem(4, pauseItem);
     }
 
+    /**
+     * Выдает игроку предмет завершения воспроизведения игры
+     */
     public void giveFinishItem(Player player) {
         player.getInventory().setItem(4, finishItem);
     }

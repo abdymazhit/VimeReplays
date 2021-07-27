@@ -16,14 +16,24 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Отвечает за работу NPC
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class NPC {
 
+    /** NPC игрок */
     private final EntityPlayer npc;
 
-    public NPC(String playerName, double x, double y, double z, float yaw, float pitch) {
+    /**
+     * Инициализирует NPC и добавляет в мир
+     */
+    public NPC(String npcName, double x, double y, double z, float yaw, float pitch) {
         MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
         WorldServer nmsWorld = ((CraftWorld) Bukkit.getWorld("replayMap")).getHandle();
-        GameProfile gameProfile = new GameProfile(UUID.randomUUID(), playerName);
+        GameProfile gameProfile = new GameProfile(UUID.randomUUID(), npcName);
 
         npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, new PlayerInteractManager(nmsWorld));
         Player npcPlayer = npc.getBukkitEntity().getPlayer();
@@ -40,6 +50,9 @@ public class NPC {
         setHeadRotation(yaw, pitch);
     }
 
+    /**
+     * Добавляет NPC в список таба
+     */
     public void addToTabList() {
         PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo();
 
@@ -52,6 +65,9 @@ public class NPC {
         sendPacket(packet);
     }
 
+    /**
+     * Удаляет NPC из списка таба
+     */
     public void removeFromTabList() {
         PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo();
 
@@ -64,6 +80,9 @@ public class NPC {
         sendPacket(packet);
     }
 
+    /**
+     * Телепортирует NPC в местоположение
+     */
     public void teleport(double x, double y, double z, float yaw, float pitch) {
         PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport();
         setValue(packet, "a", npc.getId());
@@ -77,9 +96,12 @@ public class NPC {
         setHeadRotation(yaw, pitch);
     }
 
+    /**
+     * Устанавливает положие головы для NPC
+     */
     public void setHeadRotation(float yaw, float pitch) {
         PacketPlayOutEntity.PacketPlayOutEntityLook packet = new PacketPlayOutEntity.PacketPlayOutEntityLook(npc.getId(),
-                VimeReplays.getLocationUtils().getFixRotation(yaw), VimeReplays.getLocationUtils().getFixRotation(pitch) , true);
+            VimeReplays.getLocationUtils().getFixRotation(yaw), VimeReplays.getLocationUtils().getFixRotation(pitch) , true);
         PacketPlayOutEntityHeadRotation packetHead = new PacketPlayOutEntityHeadRotation();
         setValue(packetHead, "a", npc.getId());
         setValue(packetHead, "b", VimeReplays.getLocationUtils().getFixRotation(yaw));
@@ -89,6 +111,10 @@ public class NPC {
         sendPacket(packetHead);
     }
 
+    /**
+     * Устанавливает анимацию для NPC
+     * @param animationType тип анимации
+     */
     public void setAnimation(AnimationType animationType) {
         PacketPlayOutAnimation packet = new PacketPlayOutAnimation();
         setValue(packet, "a", npc.getId());
@@ -102,6 +128,9 @@ public class NPC {
         sendPacket(packet);
     }
 
+    /**
+     * Устанавливает анимацию, крадется ли NPC
+     */
     public void setSneaking(boolean isSneaking) {
         DataWatcher dw = npc.getDataWatcher();
         if(isSneaking) {
@@ -113,6 +142,11 @@ public class NPC {
         sendPacket(packet);
     }
 
+    /**
+     * Устанавливает экипировку для NPC
+     * @param equipmentType тип экипировки
+     * @param itemStack предмет экипировки
+     */
     public void setEquipment(EquipmentType equipmentType, ItemStack itemStack) {
         PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment();
         setValue(packet, "a", npc.getId());
@@ -131,28 +165,37 @@ public class NPC {
         sendPacket(packet);
     }
 
-    public void setValue(Object obj, String name, Object value) {
+    /**
+     * Устанавливает значение пакета
+     */
+    public void setValue(Object object, String name, Object value) {
         try {
-            Field field = obj.getClass().getDeclaredField(name);
+            Field field = object.getClass().getDeclaredField(name);
             field.setAccessible(true);
-            field.set(obj, value);
-        } catch(Exception ignored) {
-
+            field.set(object, value);
+        } catch(Exception exception) {
+            exception.printStackTrace();
         }
     }
 
+    /**
+     * Возвращает значение пакета
+     */
     public Object getValue(Object obj, String name) {
         try {
             Field field = obj.getClass().getDeclaredField(name);
             field.setAccessible(true);
             return field.get(obj);
-        } catch(Exception ignored) {
-
+        } catch(Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * Отправляет пакет зрителю
+     */
     public void sendPacket(Packet<?> packet) {
-        ((CraftPlayer) VimeReplays.getPlayingManager().getPlayingHandler().getPlayer()).getHandle().playerConnection.sendPacket(packet);
+        ((CraftPlayer) VimeReplays.getPlayingManager().getPlayingHandler().getViewer()).getHandle().playerConnection.sendPacket(packet);
     }
 }

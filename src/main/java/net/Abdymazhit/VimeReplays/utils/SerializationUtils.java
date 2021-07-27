@@ -6,10 +6,20 @@ import net.Abdymazhit.VimeReplays.replay.data.equipment.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Отвечает за хранение id записываемых данных для сериализации
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class SerializationUtils {
 
+    /** Хранит id класса записываемых данных */
     private final Map<Class<?>, Integer> dataTypeId;
 
+    /**
+     * Добавляет записываемые данные с их id
+     */
     public SerializationUtils() {
         dataTypeId = new HashMap<>();
 
@@ -32,10 +42,18 @@ public class SerializationUtils {
         dataTypeId.put(BootsData.class, 17);
     }
 
+    /**
+     * Возвращает id класса записываемых данных
+     * @param data класс записываемых данных
+     */
     public Integer getId(Class<?> data) {
         return dataTypeId.get(data);
     }
 
+    /**
+     * Возвращает класс записываемых данных
+     * @param id id класса записываемых данных
+     */
     public Class<?> getData(int id) {
         for(Class<?> c : dataTypeId.keySet()) {
             if(dataTypeId.get(c) == id) {

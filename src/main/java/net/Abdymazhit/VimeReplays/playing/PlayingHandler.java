@@ -13,18 +13,38 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Отвечает за воспроизведение игры
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class PlayingHandler {
 
+    /** Статус воспроизведения игры */
     private PlayingStatus playingStatus;
+
+    /** Текущий тик воспроизведения игры */
     private int currentTick;
+
+    /** Скорость воспроизведения игры */
     private double playingSpeed;
 
+    /** Базовый класс для воспроизведение игры с разными скоростями */
     private final ScheduledExecutorService scheduledExecutorService;
+
+    /** Шедулер воспроизведения игры */
     private ScheduledFuture<?> scheduler;
 
-    private Player player;
+    /** Зритель воспроизведения игры */
+    private Player viewer;
+
+    /** Хранит информацию о NPC и его id */
     private final Map<Short, NPC> npcList;
 
+    /**
+     * Инициализирует начальные значения для воспроизведения игры
+     */
     public PlayingHandler() {
         playingStatus = PlayingStatus.PAUSE;
         currentTick = 0;
@@ -33,6 +53,16 @@ public class PlayingHandler {
         npcList = new HashMap<>();
     }
 
+    /**
+     * Устанавливает игрока зрителем воспроизведения игры
+     */
+    public void setViewer(Player viewer) {
+        this.viewer = viewer;
+    }
+
+    /**
+     * Начинает воспроизведение игры
+     */
     public void start() {
         playingStatus = PlayingStatus.PLAY;
         if(playingSpeed == 0.25) {
@@ -48,54 +78,71 @@ public class PlayingHandler {
         } else if(playingSpeed == 4.0) {
             scheduler = scheduledExecutorService.scheduleWithFixedDelay(this::performTickActions, 0, 6250, TimeUnit.MICROSECONDS);
         }
-        VimeReplays.getPlayingManager().getPlayingItems().givePlayItem(player);
+        VimeReplays.getPlayingManager().getPlayingItems().givePlayItem(viewer);
     }
 
+    /**
+     * Выполняет действия первого тика (добавляет NPC, чтобы игрок сразу их видел)
+     */
     public void performFirstTickActions() {
         List<RecordingData> tickRecords = VimeReplays.getPlayingManager().getReplay().records.get(0);
-        VimeReplays.getPlayingManager().getPlayingHandler().performAction(tickRecords);
-    }
-
-    private void performTickActions() {
-        List<RecordingData> tickRecords = VimeReplays.getPlayingManager().getReplay().records.get(currentTick);
-        VimeReplays.getPlayingManager().getPlayingHandler().performAction(tickRecords);
-
-        currentTick++;
-
-        if(VimeReplays.getPlayingManager().getReplay().records.size() == currentTick) {
-            finish();
-        }
-    }
-
-    public void pause() {
-        playingStatus = PlayingStatus.PAUSE;
-        scheduler.cancel(true);
-        VimeReplays.getPlayingManager().getPlayingItems().givePauseItem(player);
-    }
-
-    public void finish() {
-        playingStatus = PlayingStatus.FINISH;
-        scheduler.cancel(true);
-        VimeReplays.getPlayingManager().getPlayingItems().giveFinishItem(player);
-    }
-
-    public void restart() {
-        currentTick = 0;
-        playingStatus = PlayingStatus.PAUSE;
-        scheduler.cancel(true);
-        VimeReplays.getPlayingManager().getPlayingItems().givePauseItem(player);
-        performFirstTickActions();
-    }
-
-    public void performAction(List<RecordingData> tickRecords) {
         for(RecordingData recordingData : tickRecords) {
             recordingData.performAction();
         }
     }
 
+    /**
+     * Выполняет действия тика
+     */
+    private void performTickActions() {
+        List<RecordingData> tickRecords = VimeReplays.getPlayingManager().getReplay().records.get(currentTick);
+        for(RecordingData recordingData : tickRecords) {
+            recordingData.performAction();
+        }
+
+        currentTick++;
+
+        // Завершать воспроизведение, если вся игра была просмотрена
+        if(VimeReplays.getPlayingManager().getReplay().records.size() == currentTick) {
+            finish();
+        }
+    }
+
+    /**
+     * Ставит на паузу воспроизведение игры
+     */
+    public void pause() {
+        playingStatus = PlayingStatus.PAUSE;
+        scheduler.cancel(true);
+        VimeReplays.getPlayingManager().getPlayingItems().givePauseItem(viewer);
+    }
+
+    /**
+     * Завершает воспроизведение игры
+     */
+    public void finish() {
+        playingStatus = PlayingStatus.FINISH;
+        scheduler.cancel(true);
+        VimeReplays.getPlayingManager().getPlayingItems().giveFinishItem(viewer);
+    }
+
+    /**
+     * Начинает заново воспроизведение игры
+     */
+    public void restart() {
+        currentTick = 0;
+        playingStatus = PlayingStatus.PAUSE;
+        scheduler.cancel(true);
+        VimeReplays.getPlayingManager().getPlayingItems().givePauseItem(viewer);
+        performFirstTickActions();
+    }
+
+    /**
+     * Уменьшает скорость воспроизведения игры
+     */
     public void minusPlayingSpeed() {
         if(playingSpeed == 0.25) {
-            player.sendMessage("§cВы не можете изменить скорость воспроизведения ниже чем 0.25x!");
+            viewer.sendMessage("§cВы не можете изменить скорость воспроизведения ниже чем 0.25x!");
         } else if(playingSpeed == 0.5) {
             playingSpeed = 0.25;
         } else if(playingSpeed == 1.0) {
@@ -107,10 +154,13 @@ public class PlayingHandler {
         } else if(playingSpeed == 4.0) {
             playingSpeed = 3.0;
         } else {
-            player.sendMessage("§cПроизошла ошибка с изменением скорости воспроизведения!");
+            viewer.sendMessage("§cПроизошла ошибка с изменением скорости воспроизведения!");
         }
     }
 
+    /**
+     * Увеличивает скорость воспроизведения игры
+     */
     public void plusPlayingSpeed() {
         if(playingSpeed == 0.25) {
             playingSpeed = 0.5;
@@ -123,36 +173,50 @@ public class PlayingHandler {
         } else if(playingSpeed == 3.0) {
             playingSpeed = 4.0;
         } else if(playingSpeed == 4.0) {
-            player.sendMessage("§cВы не можете изменить скорость воспроизведения больше чем 4x!");
+            viewer.sendMessage("§cВы не можете изменить скорость воспроизведения больше чем 4x!");
         } else {
-            player.sendMessage("§cПроизошла ошибка с изменением скорости воспроизведения!");
+            viewer.sendMessage("§cПроизошла ошибка с изменением скорости воспроизведения!");
         }
     }
 
+    /**
+     * Возвращает статус воспроизведения игры
+     */
     public PlayingStatus getPlayingStatus() {
         return playingStatus;
     }
 
+    /**
+     * Возвращает текущий тик воспроизведения игры
+     */
     public int getCurrentTick() {
         return currentTick;
     }
 
+    /**
+     * Возвращает скорость воспроизведения игры
+     */
     public double getPlayingSpeed() {
         return playingSpeed;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    /**
+     * Возвращает зрителя воспроизведения игры
+     */
+    public Player getViewer() {
+        return viewer;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
+    /**
+     * Возвращает имя игрока по его id
+     */
     public String getPlayerName(int id) {
         return VimeReplays.getPlayingManager().getReplay().players.get(id);
     }
 
+    /**
+     * Возвращает список NPC
+     */
     public Map<Short, NPC> getNPCList() {
         return npcList;
     }

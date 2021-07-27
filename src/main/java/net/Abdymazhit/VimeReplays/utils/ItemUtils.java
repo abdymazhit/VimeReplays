@@ -11,10 +11,20 @@ import org.bukkit.potion.Potion;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Отвечает за хранение id предметов
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class ItemUtils {
 
+    /** Хранит id предметов */
     private final Map<Material, Map<Item, Integer>> items;
 
+    /**
+     * Добавляет предметы с их id
+     */
     public ItemUtils() {
         items = new HashMap<>();
 
@@ -1726,6 +1736,9 @@ public class ItemUtils {
         }});
     }
 
+    /**
+     * Возвращает id предмета
+     */
     public int getItemId(ItemStack itemStack) {
         if(itemStack.getType() != Material.POTION) {
             Map<Item, Integer> value = items.get(itemStack.getType());
@@ -1759,6 +1772,9 @@ public class ItemUtils {
         return -1;
     }
 
+    /**
+     * Возвращает предмет по его id и зачарованиям
+     */
     public net.minecraft.server.v1_8_R3.ItemStack getItemStack(int itemId, Map<Enchantment, Integer> enchantments) {
         net.minecraft.server.v1_8_R3.ItemStack itemStack = null;
 

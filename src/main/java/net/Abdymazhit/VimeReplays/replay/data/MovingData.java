@@ -7,19 +7,41 @@ import net.Abdymazhit.VimeReplays.playing.NPC;
 
 import java.io.Serializable;
 
+/**
+ * Конструктор создания записи движения игрока для сериализации
+ *
+ * @version   27.07.2021
+ * @author    Islam Abdymazhit
+ */
 public class MovingData extends RecordingData implements Serializable {
 
+    /** Uid сериализации */
     private static final long serialVersionUID = 1L;
 
+    /** Id игрока */
     private short entityId;
+
+    /** Координата x игрока */
     private short x;
+
+    /** Координата y игрока */
     private short y;
+
+    /** Координата z игрока */
     private short z;
+
+    /** Значение yaw игрока */
     private short yaw;
+
+    /** Значение pitch игрока */
     private short pitch;
 
+    /** Пустой инициализатор (нужен для создания через class.newInstance()) */
     public MovingData() { }
 
+    /**
+     * Инициализирует запись движения игрока
+     */
     public MovingData(short entityId, short x, short y, short z, short yaw, short pitch) {
         this.entityId = entityId;
         this.x = x;
@@ -29,30 +51,51 @@ public class MovingData extends RecordingData implements Serializable {
         this.pitch = pitch;
     }
 
+    /**
+     * Возвращает id игрока
+     */
     public short getEntityId() {
         return entityId;
     }
 
+    /**
+     * Возвращает координату x игрока
+     */
     public short getX() {
         return x;
     }
 
+    /**
+     * Возвращает координату y игрока
+     */
     public short getY() {
         return y;
     }
 
+    /**
+     * Возвращает координату z игрока
+     */
     public short getZ() {
         return z;
     }
 
+    /**
+     * Возвращает значение yaw игрока
+     */
     public short getYaw() {
         return yaw;
     }
 
+    /**
+     * Возвращает значение pitch игрока
+     */
     public short getPitch() {
         return pitch;
     }
 
+    /**
+     * Записывает запись в файл (сериализация)
+     */
     public void write(Output output) {
         output.writeByte(VimeReplays.getSerializationUtils().getId(MovingData.class));
         output.writeShort(entityId);
@@ -63,6 +106,9 @@ public class MovingData extends RecordingData implements Serializable {
         output.writeShort(pitch);
     }
 
+    /**
+     * Читает запись из файла (десериализация)
+     */
     public void read(Input input) {
         entityId = input.readShort();
         x = input.readShort();
@@ -72,6 +118,9 @@ public class MovingData extends RecordingData implements Serializable {
         pitch = input.readShort();
     }
 
+    /**
+     * Выполняет действия движения игрока
+     */
     public void performAction() {
         NPC npc = VimeReplays.getPlayingManager().getPlayingHandler().getNPCList().get(entityId);
         double x = VimeReplays.getLocationUtils().getLocationDouble(this.x);
