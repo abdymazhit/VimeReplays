@@ -1,7 +1,7 @@
 package net.Abdymazhit.VimeReplays.recording.dispatchers.events;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
-import net.Abdymazhit.VimeReplays.customs.EquipmentType;
+import net.Abdymazhit.VimeReplays.enums.EquipmentType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,9 +11,9 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 
 /**
- * Диспетчер обработки экипировки игрока
+ * Диспетчер обработки экипировки entity
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class EquipmentDispatcher implements Listener {
@@ -25,7 +25,7 @@ public class EquipmentDispatcher implements Listener {
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
 
-        if(VimeReplays.getRecordingManager().getRecordablePlayers().contains(player)) {
+        if(VimeReplays.getRecordingManager().getRecordableEntities().contains(player)) {
             VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.HAND, player.getInventory().getItem(event.getNewSlot()));
         }
     }
@@ -60,7 +60,7 @@ public class EquipmentDispatcher implements Listener {
     }
 
     /**
-     * Отправляет запись о экипировке игрока
+     * Отправляет запись о экипировке entity
      */
     private void sendEquipmentData(Player player) {
         VimeReplays.getRecordingManager().getMainDispatcher().addItemData(player, EquipmentType.HELMET, player.getInventory().getHelmet());

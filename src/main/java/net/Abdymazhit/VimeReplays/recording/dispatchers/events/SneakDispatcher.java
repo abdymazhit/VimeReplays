@@ -1,17 +1,17 @@
 package net.Abdymazhit.VimeReplays.recording.dispatchers.events;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
-import net.Abdymazhit.VimeReplays.replay.data.SneakingData;
-import net.Abdymazhit.VimeReplays.replay.data.UnsneakingData;
+import net.Abdymazhit.VimeReplays.replay.data.animations.SneakingData;
+import net.Abdymazhit.VimeReplays.replay.data.animations.UnsneakingData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 /**
- * Диспетчер обработки крадется ли игрок (shift)
+ * Диспетчер обработки анимации крадется ли игрок (shift)
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class SneakDispatcher implements Listener {
@@ -24,11 +24,11 @@ public class SneakDispatcher implements Listener {
         Player player = event.getPlayer();
 
         // Проверить игрока на записываемость и записать запись
-        if(VimeReplays.getRecordingManager().getRecordablePlayers().contains(player)) {
+        if(VimeReplays.getRecordingManager().getRecordableEntities().contains(player)) {
             if (event.isSneaking()) {
-                VimeReplays.getRecordingManager().addRecordingData(new SneakingData(VimeReplays.getRecordingManager().getPlayerId(player.getName())));
+                VimeReplays.getRecordingManager().addRecordingData(new SneakingData(VimeReplays.getRecordingManager().getMainDispatcher().getEntityId(player)));
             } else {
-                VimeReplays.getRecordingManager().addRecordingData(new UnsneakingData(VimeReplays.getRecordingManager().getPlayerId(player.getName())));
+                VimeReplays.getRecordingManager().addRecordingData(new UnsneakingData(VimeReplays.getRecordingManager().getMainDispatcher().getEntityId(player)));
             }
         }
     }

@@ -1,15 +1,20 @@
 package net.Abdymazhit.VimeReplays;
 
-import net.Abdymazhit.VimeReplays.customs.Mode;
+import net.Abdymazhit.VimeReplays.enums.Mode;
 import net.Abdymazhit.VimeReplays.playing.PlayingManager;
 import net.Abdymazhit.VimeReplays.recording.RecordingManager;
-import net.Abdymazhit.VimeReplays.utils.*;
+import net.Abdymazhit.VimeReplays.utils.FileUtils;
+import net.Abdymazhit.VimeReplays.utils.LocationUtils;
+import net.Abdymazhit.VimeReplays.utils.SerializationUtils;
+import net.Abdymazhit.VimeReplays.utils.storage.EnchantmentUtils;
+import net.Abdymazhit.VimeReplays.utils.storage.EntityUtils;
+import net.Abdymazhit.VimeReplays.utils.storage.ItemUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Главный класс, отвечает за весь плагин
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class VimeReplays extends JavaPlugin {
@@ -32,8 +37,14 @@ public class VimeReplays extends JavaPlugin {
     /** Утилита для работы с местоположениями */
     private static LocationUtils locationUtils;
 
-    /** Утилита для работы с предметами */
+    /** Хранилище id предметов */
     private static ItemUtils itemUtils;
+
+    /** Хранилище id entity */
+    private static EntityUtils entityUtils;
+
+    /** Хранилище id зачарований */
+    private static EnchantmentUtils enchantmentUtils;
 
     /**
      * Событие включения плагина
@@ -48,6 +59,8 @@ public class VimeReplays extends JavaPlugin {
         serializationUtils = new SerializationUtils();
         locationUtils = new LocationUtils();
         itemUtils = new ItemUtils();
+        entityUtils = new EntityUtils();
+        enchantmentUtils = new EnchantmentUtils();
 
         if(Config.mode.equals(Mode.RECORDER)) {
             recordingManager = new RecordingManager();
@@ -107,9 +120,23 @@ public class VimeReplays extends JavaPlugin {
     }
 
     /**
-     * Возвращает утилиту для работы с предметами
+     * Возвращает хранилище id предметов
      */
     public static ItemUtils getItemUtils() {
         return itemUtils;
+    }
+
+    /**
+     * Возвращает хранилище id entity
+     */
+    public static EntityUtils getEntityUtils() {
+        return entityUtils;
+    }
+
+    /**
+     * Возвращает хранилище id зачарований
+     */
+    public static EnchantmentUtils getEnchantmentUtils() {
+        return enchantmentUtils;
     }
 }

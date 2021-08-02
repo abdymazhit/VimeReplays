@@ -1,16 +1,16 @@
 package net.Abdymazhit.VimeReplays.recording.dispatchers.events;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
-import net.Abdymazhit.VimeReplays.replay.data.DamageData;
-import org.bukkit.entity.Player;
+import net.Abdymazhit.VimeReplays.replay.data.animations.DamageData;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
- * Диспетчер обработки анимации дамага
+ * Диспетчер обработки анимации получения урона entity
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class DamageDispatcher implements Listener {
@@ -22,14 +22,12 @@ public class DamageDispatcher implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         // Проверить, не отменено ли событие
         if(!event.isCancelled()) {
-            if(event.getEntity() instanceof Player) {
-                Player player = (Player) event.getEntity();
+            Entity entity = event.getEntity();
 
-                // Проверить, является ли игрок записываемым
-                if(VimeReplays.getRecordingManager().getRecordablePlayers().contains(player)) {
-                    // Добавить запись о дамаге
-                    VimeReplays.getRecordingManager().addRecordingData(new DamageData(VimeReplays.getRecordingManager().getPlayerId(player.getName())));
-                }
+            // Проверить, является ли entity записываемым
+            if(VimeReplays.getRecordingManager().getRecordableEntities().contains(entity)) {
+                // Добавить запись о дамаге
+                VimeReplays.getRecordingManager().addRecordingData(new DamageData(VimeReplays.getRecordingManager().getMainDispatcher().getEntityId(entity)));
             }
         }
     }

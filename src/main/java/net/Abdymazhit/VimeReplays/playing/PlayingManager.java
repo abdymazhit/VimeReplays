@@ -1,7 +1,7 @@
 package net.Abdymazhit.VimeReplays.playing;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
-import net.Abdymazhit.VimeReplays.customs.PlayingStatus;
+import net.Abdymazhit.VimeReplays.enums.PlayingStatus;
 import net.Abdymazhit.VimeReplays.playing.events.PlayerInteractEventListener;
 import net.Abdymazhit.VimeReplays.playing.events.PlayerJoinEventListener;
 import net.Abdymazhit.VimeReplays.playing.events.cancelled.*;
@@ -23,7 +23,7 @@ import java.io.IOException;
 /**
  * Базовый класс для воспроизведения игры
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class PlayingManager {

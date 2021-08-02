@@ -1,8 +1,9 @@
 package net.Abdymazhit.VimeReplays.playing;
 
 import net.Abdymazhit.VimeReplays.VimeReplays;
-import net.Abdymazhit.VimeReplays.customs.PlayingStatus;
-import net.Abdymazhit.VimeReplays.replay.data.RecordingData;
+import net.Abdymazhit.VimeReplays.enums.PlayingStatus;
+import net.Abdymazhit.VimeReplays.playing.nms.NMSEntity;
+import net.Abdymazhit.VimeReplays.replay.data.customs.RecordingData;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Отвечает за воспроизведение игры
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class PlayingHandler {
@@ -39,8 +40,8 @@ public class PlayingHandler {
     /** Зритель воспроизведения игры */
     private Player viewer;
 
-    /** Хранит информацию о NPC и его id */
-    private final Map<Short, NPC> npcList;
+    /** Хранит информацию о entity и его id */
+    private final Map<Short, NMSEntity> entityList;
 
     /**
      * Инициализирует начальные значения для воспроизведения игры
@@ -50,7 +51,7 @@ public class PlayingHandler {
         currentTick = 0;
         playingSpeed = 1.0;
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        npcList = new HashMap<>();
+        entityList = new HashMap<>();
     }
 
     /**
@@ -210,14 +211,14 @@ public class PlayingHandler {
     /**
      * Возвращает имя игрока по его id
      */
-    public String getPlayerName(int id) {
+    public String getPlayerName(short id) {
         return VimeReplays.getPlayingManager().getReplay().players.get(id);
     }
 
     /**
-     * Возвращает список NPC
+     * Возвращает список entity
      */
-    public Map<Short, NPC> getNPCList() {
-        return npcList;
+    public Map<Short, NMSEntity> getEntityList() {
+        return entityList;
     }
 }

@@ -1,12 +1,12 @@
 package net.Abdymazhit.VimeReplays;
 
-import net.Abdymazhit.VimeReplays.customs.Mode;
+import net.Abdymazhit.VimeReplays.enums.Mode;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * Отвечает за работу с config файлом
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class Config {

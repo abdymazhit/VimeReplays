@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 /**
  * Обработчик пакетов
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class PacketsListener {

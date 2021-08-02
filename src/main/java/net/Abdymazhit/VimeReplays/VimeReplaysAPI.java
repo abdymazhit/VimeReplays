@@ -1,6 +1,6 @@
 package net.Abdymazhit.VimeReplays;
 
-import net.Abdymazhit.VimeReplays.customs.StatusCode;
+import net.Abdymazhit.VimeReplays.enums.RecordingStatus;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Отвечает за работу с API
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class VimeReplaysAPI {
@@ -20,7 +20,7 @@ public class VimeReplaysAPI {
      * @param mapName название карты
      * @param players начальный список записываемых игроков
      */
-    public static StatusCode startRecording(String gameName, String gameType, String mapName, List<Player> players) {
+    public static RecordingStatus startRecording(String gameName, String gameType, String mapName, List<Player> players) {
         return VimeReplays.getRecordingManager().startRecording(gameName, gameType, mapName, players);
     }
 
@@ -36,6 +36,6 @@ public class VimeReplaysAPI {
      * @param player записываемый игрок
      */
     public static void removeRecordablePlayer(Player player) {
-        VimeReplays.getRecordingManager().removeRecordablePlayer(player);
+        VimeReplays.getRecordingManager().getRecordableEntities().remove(player);
     }
 }

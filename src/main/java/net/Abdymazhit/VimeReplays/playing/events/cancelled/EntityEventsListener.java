@@ -7,7 +7,7 @@ import org.bukkit.event.entity.*;
 /**
  * Отменяет события связанные с entity
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class EntityEventsListener implements Listener {
@@ -17,7 +17,9 @@ public class EntityEventsListener implements Listener {
      */
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
-        event.setCancelled(true);
+        if(!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+            event.setCancelled(true);
+        }
     }
 
     /**

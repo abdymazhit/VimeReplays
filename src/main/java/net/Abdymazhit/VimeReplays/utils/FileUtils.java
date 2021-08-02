@@ -7,10 +7,6 @@ import com.esotericsoftware.kryo.unsafe.UnsafeInput;
 import com.esotericsoftware.kryo.unsafe.UnsafeOutput;
 import com.github.luben.zstd.Zstd;
 import net.Abdymazhit.VimeReplays.replay.Replay;
-import net.Abdymazhit.VimeReplays.replay.ReplaySerializer;
-import net.Abdymazhit.VimeReplays.replay.data.MovingData;
-import net.Abdymazhit.VimeReplays.replay.data.SneakingData;
-import net.Abdymazhit.VimeReplays.replay.data.UnsneakingData;
 import org.bukkit.Bukkit;
 
 import java.io.*;
@@ -20,13 +16,13 @@ import java.nio.file.Paths;
 /**
  * Отвечает за работу с файлами плагина
  *
- * @version   27.07.2021
+ * @version   02.08.2021
  * @author    Islam Abdymazhit
  */
 public class FileUtils {
 
     /**
-     * Сохраняет игру в виде файла
+     * Сохраняет запись игры в виде файла
      */
     public void saveFile(Replay replay) {
         serialize(replay);
@@ -54,9 +50,6 @@ public class FileUtils {
             ReplaySerializer replaySerializer = new ReplaySerializer();
 
             kryo.register(Replay.class, replaySerializer);
-            kryo.register(MovingData.class);
-            kryo.register(SneakingData.class);
-            kryo.register(UnsneakingData.class);
 
             RandomAccessFile raf = new RandomAccessFile(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.replay", "rw");
             Output output = new Output(new FileOutputStream(raf.getFD()));
@@ -156,9 +149,6 @@ public class FileUtils {
             ReplaySerializer replaySerializer = new ReplaySerializer();
 
             kryo.register(Replay.class, replaySerializer);
-            kryo.register(MovingData.class);
-            kryo.register(SneakingData.class);
-            kryo.register(UnsneakingData.class);
 
             RandomAccessFile raf = new RandomAccessFile(Bukkit.getWorldContainer() + "/plugins/VimeReplays/game.replay", "rw");
             Input input = new Input(new FileInputStream(raf.getFD()));
